@@ -35,7 +35,7 @@ namespace Game
         // Start is called before the first frame update
         void Start()
         {
-            var wood = WoodManager.Instance.CreateWood(CreateWoodType.Mid);
+            var wood = WoodManager.Instance.CreateWood(WoodType.Mid);
             var pos = new Vector3(L.WoodStartPosX, 0, 0);
             wood.SetStartPos(pos);
 
@@ -91,13 +91,13 @@ namespace Game
         void CreatWood()
         {
             m_createWoodTimeCount += Time.deltaTime;
-            var timeInterval = L.WoodStartSpeed / GameManager.Instance.Speed * m_createWoodInterval;
+            var timeInterval = L.WoodStartSpeed / GameManager.Instance.speed * m_createWoodInterval;
             if (m_createWoodTimeCount >= timeInterval)
             {
                 m_createWoodTimeCount -= timeInterval;
-                WoodManager.Instance.CreateWood(CreateWoodType.Up);
-                WoodManager.Instance.CreateWood(CreateWoodType.Up);
-                WoodManager.Instance.CreateWood(CreateWoodType.Up);
+                WoodManager.Instance.CreateWood(WoodType.Up);
+                WoodManager.Instance.CreateWood(WoodType.Up);
+                WoodManager.Instance.CreateWood(WoodType.Up);
             }
         }
 

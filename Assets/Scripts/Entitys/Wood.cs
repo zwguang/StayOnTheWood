@@ -11,7 +11,7 @@ namespace Game
     public class Wood : MonoBehaviour
     {
         private Vector3 m_localPos;
-
+        public WoodType woodType = WoodType.Invalid;
         public Vector3 LocalPos
         {
             get => m_localPos;
@@ -23,27 +23,27 @@ namespace Game
 
         public float GetSpeed()
         {
-            return GameManager.Instance.Speed;
+            return GameManager.Instance.speed;
         }
         
-        public void Init(CreateWoodType type)
+        public void Init(WoodType type)
         {
             this.gameObject.SetActive(true);
 
             float startPosY = 0;
             switch (type)
             {
-                case CreateWoodType.Up:
+                case WoodType.Up:
                 {
                     startPosY = 2.5f;
                     break;
                 }
-                case CreateWoodType.Mid:
+                case WoodType.Mid:
                 {
                     startPosY = 0;
                     break;
                 }
-                case CreateWoodType.Down:
+                case WoodType.Down:
                 {
                     startPosY = -2.5f;
                     break;

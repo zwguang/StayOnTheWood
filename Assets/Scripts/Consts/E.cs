@@ -6,7 +6,7 @@
         PlayerScore
     }
 
-    public enum CreateWoodType
+    public enum WoodType
     {
         Up,
         Mid,

@@ -23,7 +23,7 @@ namespace Game
         // Update is called once per frame
         void Update()
         {
-            transform.localPosition -= new Vector3(GameManager.Instance.Speed * Time.deltaTime, 0, 0);
+            transform.localPosition -= new Vector3(GameManager.Instance.speed * Time.deltaTime, 0, 0);
         }
 
         public void Move(KeyCode type)

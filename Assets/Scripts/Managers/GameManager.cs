@@ -7,7 +7,12 @@ namespace Game
 {
     public class GameManager : Singleton<GameManager>
     {
-        public float Speed = L.WoodStartSpeed *2;
+        public float speed = L.WoodStartSpeed *2;
+
+        /// <summary>
+        /// 玩家当前是在哪个wood上
+        /// </summary>
+        public WoodType selectedWoodType = WoodType.Invalid;
         // Start is called before the first frame update
         void Start()
         {
