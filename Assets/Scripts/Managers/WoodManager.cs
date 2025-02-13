@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Common;
 using GDK;
 using UnityEngine;
@@ -63,7 +64,7 @@ namespace Game.Monos
         // }
 
         /// <summary>
-        /// 木桩的出生位置
+        /// 木桩的出生位置,乱序的
         /// </summary>
         /// <returns></returns>
         public List<WoodType> CreateWoodBronType(List<WoodType> existingWoodTypes)
@@ -74,14 +75,34 @@ namespace Game.Monos
                 return new List<WoodType> { WoodType.Mid };
             }
 
-            HashSet<WoodType> generatedHashSet = new HashSet<WoodType> { GameManager.Instance.selectedWoodType };
+            //生成必须存在的可达木桩
+            //--- 第三次随机生成在这儿
+            //-  
+            //--
+            WoodType requiredY = existingWoodTypes[m_random.Next(existingWoodTypes.Count)];
+            // while (requiredY == WoodType.Invalid)
+            // {
+            //     requiredY = existingWoodTypes[m_random.Next(existingWoodTypes.Count)];
+            // }
+            
+            List<WoodType> generatedList = new List<WoodType>{ requiredY };
             //随机生产0~2个木头
             int extraWoodCount = m_random.Next(0,3);
+            List<WoodType> availableYs = new List<WoodType> { WoodType.Up, WoodType.Mid, WoodType.Down };
             for (int i = 0; i < extraWoodCount; i++)
             {
+                //排除已生成的y
+                var remainingY = availableYs.Except(generatedList).ToList();
+                if (remainingY.Count == 0)
+                {
+                    break;
+                }
+
+                WoodType type = remainingY[m_random.Next(remainingY.Count)];
+                generatedList.Add(type);
             }
 
-            return existingWoodTypes;
+            return generatedList;
         }
     }
 

@@ -22,6 +22,8 @@ namespace Game
         private readonly float m_addSpeedInterval = 0;
 
         private int m_score = 0;
+        List<WoodType> m_woodList = new List<WoodType>();
+
 
         private void Awake()
         {
@@ -95,16 +97,18 @@ namespace Game
             if (m_createWoodTimeCount >= timeInterval)
             {
                 m_createWoodTimeCount -= timeInterval;
-                WoodManager.Instance.CreateWood(WoodType.Up);
-                WoodManager.Instance.CreateWood(WoodType.Up);
-                WoodManager.Instance.CreateWood(WoodType.Up);
+                m_woodList = WoodManager.Instance.CreateWoodBronType(m_woodList);
+                for (int i = 0; i < this.m_woodList.Count; i++)
+                {
+                    WoodManager.Instance.CreateWood(m_woodList[i]);
+                }
             }
         }
 
         void OnPlayerScore()
         {
             m_score++;
-            this.m_scoreText.text = m_score.ToString();
+            // this.m_scoreText.text = m_score.ToString();
         }
         
         void OnPlayerDie()

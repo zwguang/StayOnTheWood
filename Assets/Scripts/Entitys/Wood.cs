@@ -49,7 +49,7 @@ namespace Game
                     break;
                 }
             }
-            this.SetStartPos(new Vector3(L.WoodStartPosX, 0, 0));
+            this.SetStartPos(new Vector3(L.WoodStartPosX, startPosY, 0));
         }
         
         public void Update()
