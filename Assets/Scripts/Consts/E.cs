@@ -2,7 +2,7 @@
 {
     public enum E
     {
-        PlayerDie,
+        PlayerDeath,
         PlayerScore
     }
 
@@ -11,6 +11,9 @@
         Up,
         Mid,
         Down,
+        EmptyUp,
+        EmptyMid,
+        EmptyDown,
         Invalid
     }
 }

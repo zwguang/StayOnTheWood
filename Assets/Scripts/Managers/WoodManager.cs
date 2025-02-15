@@ -18,6 +18,34 @@ namespace Game.Monos
         private List<Wood> m_woodActiveList = new List<Wood>();
 
         private Random m_random = new Random();
+
+        private int m_woodIndex = 0;
+        private List<List<WoodType>> m_woodList = new List<List<WoodType>>
+        {
+            new List<WoodType>{WoodType.Up, WoodType.Mid, WoodType.EmptyDown},
+            new List<WoodType>{WoodType.EmptyUp, WoodType.Mid, WoodType.Down},
+            new List<WoodType>{WoodType.EmptyUp, WoodType.EmptyMid, WoodType.Down},
+            new List<WoodType>{WoodType.EmptyUp, WoodType.EmptyMid, WoodType.Down},
+            new List<WoodType>{WoodType.EmptyUp, WoodType.Mid, WoodType.Down},
+            new List<WoodType>{WoodType.EmptyUp, WoodType.Mid, WoodType.EmptyDown},
+            new List<WoodType>{WoodType.EmptyUp, WoodType.Mid, WoodType.EmptyDown},
+            new List<WoodType>{WoodType.EmptyUp, WoodType.Mid, WoodType.EmptyDown},
+            new List<WoodType>{WoodType.Up, WoodType.Mid, WoodType.EmptyDown},
+            new List<WoodType>{WoodType.Up, WoodType.EmptyMid, WoodType.EmptyDown},
+            new List<WoodType>{WoodType.Up, WoodType.EmptyMid, WoodType.EmptyDown},
+            new List<WoodType>{WoodType.Up, WoodType.EmptyMid, WoodType.Down},
+            new List<WoodType>{WoodType.Up, WoodType.EmptyMid, WoodType.Down},
+            new List<WoodType>{WoodType.Up, WoodType.Mid, WoodType.EmptyDown},
+            new List<WoodType>{WoodType.EmptyUp, WoodType.Mid, WoodType.Down},
+            new List<WoodType>{WoodType.EmptyUp, WoodType.EmptyMid, WoodType.Down},
+            new List<WoodType>{WoodType.EmptyUp, WoodType.EmptyMid, WoodType.Down},
+            new List<WoodType>{WoodType.EmptyUp, WoodType.Mid,WoodType.Down},
+            new List<WoodType>{WoodType.EmptyUp, WoodType.Mid, WoodType.EmptyDown},
+            new List<WoodType>{WoodType.EmptyUp, WoodType.Mid, WoodType.EmptyDown},
+        };
+
+        //生成的误导木桩的数量
+        private int m_misdirectCount = 0;
         protected override void OnDestroy()
         {
             m_resAdapter.Dispose();
@@ -40,7 +68,7 @@ namespace Game.Monos
             // m_woodPre = m_resAdapter.Load<GameObject>("");
         }
         
-        public Wood CreateWood(WoodType type)
+        public Wood CreateWood(WoodType type, int batch)
         {
             var wood = this.m_woodPool.Pop();
             if (!wood)
@@ -49,7 +77,7 @@ namespace Game.Monos
                 wood.transform.SetParent(this.m_woodParent, true);
             }
             
-            wood.Init(type);
+            wood.Init(type,batch);
             m_woodActiveList.Add(wood);
             return wood;
         }
@@ -62,7 +90,17 @@ namespace Game.Monos
         //         wood.Update();
         //     }
         // }
+        public List<WoodType> CreateWoodBronType()
+        {
+            if (m_woodIndex == this.m_woodList.Count)
+            {
+                this.m_woodIndex = 0;
+            }
 
+            return m_woodList[m_woodIndex++];
+        }
+        
+        
         /// <summary>
         /// 木桩的出生位置,乱序的
         /// </summary>
@@ -76,9 +114,6 @@ namespace Game.Monos
             }
 
             //生成必须存在的可达木桩
-            //--- 第三次随机生成在这儿
-            //-  
-            //--
             WoodType requiredY = existingWoodTypes[m_random.Next(existingWoodTypes.Count)];
             // while (requiredY == WoodType.Invalid)
             // {
@@ -86,8 +121,8 @@ namespace Game.Monos
             // }
             
             List<WoodType> generatedList = new List<WoodType>{ requiredY };
-            //随机生产0~2个木头
-            int extraWoodCount = m_random.Next(0,3);
+            //随机生产0~1个木头
+            int extraWoodCount = m_random.Next(0,2);
             List<WoodType> availableYs = new List<WoodType> { WoodType.Up, WoodType.Mid, WoodType.Down };
             for (int i = 0; i < extraWoodCount; i++)
             {
@@ -102,6 +137,22 @@ namespace Game.Monos
                 generatedList.Add(type);
             }
 
+            //连续多次生成了上下两个，则必须加一个中间位置 todo
+            //----- 第5次随机生成在这儿
+            //-  
+            //----
+            if (generatedList.Count == 2 && generatedList[0] != WoodType.Mid && generatedList[1] != WoodType.Mid)
+            {
+                if (++m_misdirectCount == 3)
+                {
+                    m_misdirectCount = 0;
+                    generatedList.Add(WoodType.Mid);
+                }
+            }
+            else
+            {
+                m_misdirectCount = 0;
+            }
             return generatedList;
         }
     }

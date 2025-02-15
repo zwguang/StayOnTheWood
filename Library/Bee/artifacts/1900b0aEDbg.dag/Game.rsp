@@ -354,6 +354,8 @@
 "Assets/Scripts/Gamefacade.cs"
 "Assets/Scripts/Managers/GameManager.cs"
 "Assets/Scripts/Managers/WoodManager.cs"
+"Assets/Scripts/UIViewCtrl/GameOverPop.cs"
+"Assets/Scripts/UIViewCtrl/UBoot.cs"
 -langversion:9.0
 /deterministic
 /optimize-

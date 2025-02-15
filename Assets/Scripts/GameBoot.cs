@@ -21,14 +21,14 @@ namespace Game
         private readonly float m_createWoodInterval = 1f;
         private readonly float m_addSpeedInterval = 0;
 
-        private int m_score = 0;
+        private int m_batchCount = 0;
         List<WoodType> m_woodList = new List<WoodType>();
 
 
         private void Awake()
         {
             EventManager.Instance.On((int)E.PlayerScore, this.OnPlayerScore);
-            EventManager.Instance.On((int)E.PlayerDie, this.OnPlayerDie);
+            EventManager.Instance.On((int)E.PlayerDeath, this.OnPlayerDie);
 
             WoodManager.Instance.Init(this.m_woodParentTrans, this.m_woodPre);
 
@@ -37,7 +37,7 @@ namespace Game
         // Start is called before the first frame update
         void Start()
         {
-            var wood = WoodManager.Instance.CreateWood(WoodType.Mid);
+            var wood = WoodManager.Instance.CreateWood(WoodType.Mid, m_batchCount);
             var pos = new Vector3(L.WoodStartPosX, 0, 0);
             wood.SetStartPos(pos);
 
@@ -48,7 +48,7 @@ namespace Game
 
         private void Init()
         {
-            this.m_score = 0;
+           
         }
 
         // Update is called once per frame
@@ -97,18 +97,18 @@ namespace Game
             if (m_createWoodTimeCount >= timeInterval)
             {
                 m_createWoodTimeCount -= timeInterval;
-                m_woodList = WoodManager.Instance.CreateWoodBronType(m_woodList);
+                // m_woodList = WoodManager.Instance.CreateWoodBronType(m_woodList);
+                m_woodList = WoodManager.Instance.CreateWoodBronType();
+                m_batchCount++;
                 for (int i = 0; i < this.m_woodList.Count; i++)
                 {
-                    WoodManager.Instance.CreateWood(m_woodList[i]);
+                    WoodManager.Instance.CreateWood(m_woodList[i], m_batchCount);
                 }
             }
         }
 
         void OnPlayerScore()
         {
-            m_score++;
-            // this.m_scoreText.text = m_score.ToString();
         }
         
         void OnPlayerDie()

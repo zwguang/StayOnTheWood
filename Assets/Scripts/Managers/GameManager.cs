@@ -7,7 +7,10 @@ namespace Game
 {
     public class GameManager : Singleton<GameManager>
     {
-        public float speed = L.WoodStartSpeed *2;
+        public float speed = L.WoodStartSpeed * 2;
+        //得分批次
+        public int soreMaxBatch = 0;
+        public int soreNum = 0;
 
         /// <summary>
         /// 玩家当前是在哪个wood上
@@ -26,6 +29,23 @@ namespace Game
         }
         
         public void Init(){}
+
+        public void PlayerDeath()
+        {
+            Time.timeScale = 0;
+        }
+
+        public void Clear()
+        {
+            this.soreMaxBatch = 0;
+            this.soreNum = 0;
+        }
+
+        public void Restart()
+        {
+            this.Clear();
+            Time.timeScale = 1;
+        }
     }
 }
 

@@ -5,13 +5,17 @@ using Assets.Scripts.Common;
 using Game.Monos;
 using GDK;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Game
 {
     public class Wood : MonoBehaviour
     {
+        private SpriteRenderer m_sprite;
+        
         private Vector3 m_localPos;
         public WoodType woodType = WoodType.Invalid;
+        [FormerlySerializedAs("batchIndex")] public int batch = 0;
         public Vector3 LocalPos
         {
             get => m_localPos;
@@ -21,12 +25,17 @@ namespace Game
             }
         }
 
+        private void Awake()
+        {
+            m_sprite = this.GetComponent<SpriteRenderer>();
+        }
+
         public float GetSpeed()
         {
             return GameManager.Instance.speed;
         }
         
-        public void Init(WoodType type)
+        public void Init(WoodType type, int batch)
         {
             this.gameObject.SetActive(true);
 
@@ -36,19 +45,50 @@ namespace Game
                 case WoodType.Up:
                 {
                     startPosY = 2.5f;
+                    m_sprite.color = Color.white;
+                    this.gameObject.tag = "Wood";
                     break;
                 }
                 case WoodType.Mid:
                 {
                     startPosY = 0;
+                    m_sprite.color = Color.white;
+                    this.gameObject.tag = "Wood";
+
                     break;
                 }
                 case WoodType.Down:
                 {
                     startPosY = -2.5f;
+                    m_sprite.color = Color.white;
+                    this.gameObject.tag = "Wood";
+
+                    break;
+                }
+                case WoodType.EmptyUp:
+                {
+                    startPosY = 2.5f;
+                    m_sprite.color = new Color(1, 1, 1, 0.2f);
+                    this.gameObject.tag = "River";
+                    break;
+                }
+                case WoodType.EmptyMid:
+                {
+                    startPosY = 0;
+                    m_sprite.color = new Color(1, 1, 1, 0.2f);
+                    this.gameObject.tag = "River";
+                    break;
+                }
+                case WoodType.EmptyDown:
+                {
+                    startPosY = -2.5f;
+                    m_sprite.color = new Color(1, 1, 1, 0.2f);
+                    this.gameObject.tag = "River";
                     break;
                 }
             }
+
+            this.batch = batch;
             this.SetStartPos(new Vector3(L.WoodStartPosX, startPosY, 0));
         }
         

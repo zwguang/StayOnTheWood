@@ -8,7 +8,6 @@ namespace Game
 {
     public class Player : MonoBehaviour
     {
-        public Wood wood = null;
         private void Awake()
         {
             // EventManager.Instance.On();
@@ -24,6 +23,26 @@ namespace Game
         void Update()
         {
             transform.localPosition -= new Vector3(GameManager.Instance.speed * Time.deltaTime, 0, 0);
+        }
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.gameObject.CompareTag("Wood"))
+            {
+                Wood wood = other.gameObject.GetComponent<Wood>();
+                if (wood.batch > GameManager.Instance.soreMaxBatch)
+                {
+                    GameManager.Instance.soreMaxBatch = wood.batch;
+                    GameManager.Instance.soreNum++;
+                    EventManager.Instance.Trigger((int)E.PlayerScore);
+                }
+                
+            }
+            else if (other.gameObject.CompareTag("River"))
+            {
+                GameManager.Instance.PlayerDeath();
+                EventManager.Instance.Trigger((int)E.PlayerDeath);
+            }
         }
 
         public void Move(KeyCode type)
