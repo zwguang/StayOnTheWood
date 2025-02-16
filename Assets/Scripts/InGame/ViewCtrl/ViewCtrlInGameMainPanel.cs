@@ -5,18 +5,22 @@ using Game;
 using GDK;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class UBoot : MonoBehaviour
+public class ViewCtrlInGameMainPanel : MonoBehaviour
 {
     [SerializeField]
     private TextMeshProUGUI m_scoreTmp;
 
     [SerializeField] private GameObject m_gameOverPopGo;
+    [SerializeField] private Button m_homeBtn;
     private void Awake()
     {
         EventManager.Instance.On((int)E.PlayerScore, OnPlayerSore);
         EventManager.Instance.On((int)E.PlayerDeath, OnPlayerDeath);
         EventManager.Instance.On((int)E.GameStart, OnGameStart);
+        
+        m_homeBtn.onClick.AddListener(OnHomeBtnClicked);
     }
 
     // Start is called before the first frame update
@@ -44,5 +48,10 @@ public class UBoot : MonoBehaviour
     private void OnPlayerDeath()
     {
         m_gameOverPopGo.SetActive(true);
+    }
+
+    void OnHomeBtnClicked()
+    {
+        GameSceneManager.Instance.ChangeSceneByName("HomeScene");
     }
 }

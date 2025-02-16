@@ -6,7 +6,7 @@ using GDK;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameOverPop : MonoBehaviour
+public class ViewCtrlGameOverPop : MonoBehaviour
 {
     [SerializeField]
     private Button m_restartBtn;

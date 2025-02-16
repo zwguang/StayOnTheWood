@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Game;
-using Game.Monos;
 using UnityEngine;
 
 public class Gamefacade : MonoBehaviour
