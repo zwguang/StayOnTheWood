@@ -40,49 +40,52 @@ namespace Game
             this.gameObject.SetActive(true);
 
             float startPosY = 0;
+            float gapY = GameManager.Instance.woodGapY;
+            var whiteColor = Color.white;
+            var aColor = new Color(1, 1, 1, 0f);
             switch (type)
             {
                 case WoodType.Up:
                 {
-                    startPosY = 2.5f;
-                    m_sprite.color = Color.white;
+                    startPosY = gapY;
+                    m_sprite.color = whiteColor;
                     this.gameObject.tag = "Wood";
                     break;
                 }
                 case WoodType.Mid:
                 {
                     startPosY = 0;
-                    m_sprite.color = Color.white;
+                    m_sprite.color = whiteColor;
                     this.gameObject.tag = "Wood";
 
                     break;
                 }
                 case WoodType.Down:
                 {
-                    startPosY = -2.5f;
-                    m_sprite.color = Color.white;
+                    startPosY = -gapY;
+                    m_sprite.color = whiteColor;
                     this.gameObject.tag = "Wood";
 
                     break;
                 }
                 case WoodType.EmptyUp:
                 {
-                    startPosY = 2.5f;
-                    m_sprite.color = new Color(1, 1, 1, 0.2f);
+                    startPosY = gapY;
+                    m_sprite.color = aColor;
                     this.gameObject.tag = "River";
                     break;
                 }
                 case WoodType.EmptyMid:
                 {
                     startPosY = 0;
-                    m_sprite.color = new Color(1, 1, 1, 0.2f);
+                    m_sprite.color = aColor;
                     this.gameObject.tag = "River";
                     break;
                 }
                 case WoodType.EmptyDown:
                 {
-                    startPosY = -2.5f;
-                    m_sprite.color = new Color(1, 1, 1, 0.2f);
+                    startPosY = -gapY;
+                    m_sprite.color = aColor;
                     this.gameObject.tag = "River";
                     break;
                 }

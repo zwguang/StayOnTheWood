@@ -7,6 +7,7 @@ Assembly-CSharp.csproj
 Game.csproj
 GDK.csproj
 Library/AnnotationManager
+Library/Bee
 Library/APIUpdater/project-dependencies.graph
 Library/ArtifactDB
 Library/ArtifactDB-lock
@@ -33579,3 +33580,10 @@ Temp/UnityLockfile
 Temp/workerlic
 /Temp
 /Library
+/Library
+/Library
+/.idea
+/Library
+/Library/Bee
+/Library/Bee
+/Logs

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Game;
+using GDK;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,7 +30,7 @@ public class GameOverPop : MonoBehaviour
 
     private void OnRestartBtnClicked()
     {
-        GameManager.Instance.Restart();
         this.gameObject.SetActive(false);
+        EventManager.Instance.Trigger((int)E.GameStart);
     }
 }

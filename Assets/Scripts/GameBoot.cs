@@ -29,26 +29,56 @@ namespace Game
         {
             EventManager.Instance.On((int)E.PlayerScore, this.OnPlayerScore);
             EventManager.Instance.On((int)E.PlayerDeath, this.OnPlayerDie);
-
-            WoodManager.Instance.Init(this.m_woodParentTrans, this.m_woodPre);
-
+            EventManager.Instance.On((int)E.GameStart, OnGameStart);
         }
 
         // Start is called before the first frame update
         void Start()
         {
+            GameManager.Instance.OnStart();
+            WoodManager.Instance.OnStart(this.m_woodParentTrans, this.m_woodPre);
+            
+            Init();
+        }
+
+        void Clear()
+        {
+            WoodManager.Instance.Clear();
+            GameManager.Instance.Clear();
+
+            if (m_player)
+            {
+                m_player.gameObject.SetActive(false);
+            }
+        }
+
+        void OnGameStart()
+        {
+            Clear();
+
+            Init();
+        }
+        
+        private void Init()
+        {
+            
+            GameManager.Instance.Init();
+            WoodManager.Instance.Init();
+
+            m_createWoodTimeCount = 0;
+            m_batchCount = 0;
+
             var wood = WoodManager.Instance.CreateWood(WoodType.Mid, m_batchCount);
             var pos = new Vector3(L.WoodStartPosX, 0, 0);
             wood.SetStartPos(pos);
 
-            m_player = GameObject.Instantiate(m_playerPre).GetComponent<Player>();
+            if (!m_player)
+            {
+                m_player = GameObject.Instantiate(m_playerPre).GetComponent<Player>();
+                m_player.transform.SetParent(m_woodParentTrans, true);
+            }
+            m_player.gameObject.SetActive(true);
             m_player.transform.localPosition = pos;
-            m_player.transform.SetParent(m_woodParentTrans, true);
-        }
-
-        private void Init()
-        {
-           
         }
 
         // Update is called once per frame
@@ -58,8 +88,7 @@ namespace Game
 
             CreatWood();   
             
-            
-            // WoodManager.Instance.Update();
+            GameManager.Instance.Update();
         }
 
         void OnKeyDown()
@@ -93,7 +122,7 @@ namespace Game
         void CreatWood()
         {
             m_createWoodTimeCount += Time.deltaTime;
-            var timeInterval = L.WoodStartSpeed / GameManager.Instance.speed * m_createWoodInterval;
+            var timeInterval = GameManager.Instance.StartSpeed / GameManager.Instance.speed * m_createWoodInterval;
             if (m_createWoodTimeCount >= timeInterval)
             {
                 m_createWoodTimeCount -= timeInterval;
@@ -106,9 +135,10 @@ namespace Game
                 }
             }
         }
-
+        
         void OnPlayerScore()
         {
+            
         }
         
         void OnPlayerDie()

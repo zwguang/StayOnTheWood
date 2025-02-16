@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Common;
@@ -20,32 +21,84 @@ namespace Game.Monos
         private Random m_random = new Random();
 
         private int m_woodIndex = 0;
-        private List<List<WoodType>> m_woodList = new List<List<WoodType>>
+        
+        private List<List<WoodType>> m_woodList1 = new List<List<WoodType>>
         {
             new List<WoodType>{WoodType.Up, WoodType.Mid, WoodType.EmptyDown},
             new List<WoodType>{WoodType.EmptyUp, WoodType.Mid, WoodType.Down},
             new List<WoodType>{WoodType.EmptyUp, WoodType.EmptyMid, WoodType.Down},
-            new List<WoodType>{WoodType.EmptyUp, WoodType.EmptyMid, WoodType.Down},
             new List<WoodType>{WoodType.EmptyUp, WoodType.Mid, WoodType.Down},
-            new List<WoodType>{WoodType.EmptyUp, WoodType.Mid, WoodType.EmptyDown},
             new List<WoodType>{WoodType.EmptyUp, WoodType.Mid, WoodType.EmptyDown},
             new List<WoodType>{WoodType.EmptyUp, WoodType.Mid, WoodType.EmptyDown},
             new List<WoodType>{WoodType.Up, WoodType.Mid, WoodType.EmptyDown},
             new List<WoodType>{WoodType.Up, WoodType.EmptyMid, WoodType.EmptyDown},
-            new List<WoodType>{WoodType.Up, WoodType.EmptyMid, WoodType.EmptyDown},
-            new List<WoodType>{WoodType.Up, WoodType.EmptyMid, WoodType.Down},
-            new List<WoodType>{WoodType.Up, WoodType.EmptyMid, WoodType.Down},
             new List<WoodType>{WoodType.Up, WoodType.Mid, WoodType.EmptyDown},
             new List<WoodType>{WoodType.EmptyUp, WoodType.Mid, WoodType.Down},
-            new List<WoodType>{WoodType.EmptyUp, WoodType.EmptyMid, WoodType.Down},
             new List<WoodType>{WoodType.EmptyUp, WoodType.EmptyMid, WoodType.Down},
             new List<WoodType>{WoodType.EmptyUp, WoodType.Mid,WoodType.Down},
             new List<WoodType>{WoodType.EmptyUp, WoodType.Mid, WoodType.EmptyDown},
+        };
+        
+        //中下回到中下
+        private List<List<WoodType>> m_woodList2 = new List<List<WoodType>>
+        {
+            new List<WoodType>{WoodType.EmptyUp, WoodType.Mid, WoodType.Down},
+            new List<WoodType>{WoodType.EmptyUp, WoodType.EmptyMid, WoodType.Down},
+            new List<WoodType>{WoodType.EmptyUp, WoodType.Mid, WoodType.Down},
+            new List<WoodType>{WoodType.Up, WoodType.EmptyMid, WoodType.Down},
+            new List<WoodType>{WoodType.EmptyUp, WoodType.Mid, WoodType.Down},
+        };
+        
+        //中上回到中间
+        private List<List<WoodType>> m_woodList3 = new List<List<WoodType>>
+        {
+            new List<WoodType>{WoodType.Up, WoodType.Mid, WoodType.EmptyDown},
+            new List<WoodType>{WoodType.EmptyUp, WoodType.Mid, WoodType.EmptyDown},
+            new List<WoodType>{WoodType.Up, WoodType.Mid, WoodType.EmptyDown},
+            new List<WoodType>{WoodType.EmptyUp, WoodType.Mid, WoodType.Down},
             new List<WoodType>{WoodType.EmptyUp, WoodType.Mid, WoodType.EmptyDown},
         };
+        
+        //上中回到中
+        private List<List<WoodType>> m_woodList4 = new List<List<WoodType>>
+        {
+            new List<WoodType>{WoodType.Up, WoodType.Mid, WoodType.EmptyDown},
+            new List<WoodType>{WoodType.EmptyUp, WoodType.Mid, WoodType.EmptyDown},
+            new List<WoodType>{WoodType.Up, WoodType.Mid, WoodType.EmptyDown},
+            new List<WoodType>{WoodType.Up, WoodType.EmptyMid, WoodType.EmptyDown},
+            new List<WoodType>{WoodType.Up, WoodType.Mid, WoodType.EmptyDown},
+            new List<WoodType>{WoodType.Up, WoodType.EmptyMid, WoodType.Down},
+            new List<WoodType>{WoodType.Up, WoodType.Mid, WoodType.EmptyDown},
+            new List<WoodType>{WoodType.EmptyUp, WoodType.Mid, WoodType.EmptyDown},
+        };
+        
+        //中回到中下 困难
+        private List<List<WoodType>> m_woodList5 = new List<List<WoodType>>
+        {
+            new List<WoodType> { WoodType.EmptyUp, WoodType.Mid, WoodType.EmptyDown },
+            new List<WoodType> { WoodType.Up, WoodType.Mid, WoodType.Down },
+            new List<WoodType> { WoodType.Up, WoodType.EmptyMid, WoodType.Down },
+            new List<WoodType> { WoodType.EmptyUp, WoodType.Mid, WoodType.Down },
+            new List<WoodType> { WoodType.Up, WoodType.EmptyMid, WoodType.Down },
+            new List<WoodType> { WoodType.EmptyUp, WoodType.Mid, WoodType.Down },
+            new List<WoodType> { WoodType.EmptyUp, WoodType.Mid, WoodType.EmptyDown },
+        };
+        
+        //中回到上中 困难
+        private List<List<WoodType>> m_woodList6 = new List<List<WoodType>>
+        {
+            new List<WoodType> { WoodType.EmptyUp, WoodType.Mid, WoodType.EmptyDown },
+            new List<WoodType> { WoodType.Up, WoodType.Mid, WoodType.Down },
+            new List<WoodType> { WoodType.Up, WoodType.EmptyMid, WoodType.Down },
+            new List<WoodType> { WoodType.Up, WoodType.Mid, WoodType.EmptyDown },
+            new List<WoodType> { WoodType.EmptyUp, WoodType.Mid, WoodType.EmptyDown },
+            new List<WoodType> { WoodType.EmptyUp, WoodType.Mid, WoodType.Down },
+            new List<WoodType> { WoodType.Up, WoodType.Mid, WoodType.EmptyDown },
+        };
 
-        //生成的误导木桩的数量
-        private int m_misdirectCount = 0;
+        private List<List<WoodType>> m_woodList;
+        private List<List<List<WoodType>>> m_woodListArr;
+        
         protected override void OnDestroy()
         {
             m_resAdapter.Dispose();
@@ -57,15 +110,39 @@ namespace Game.Monos
             this.m_woodActiveList.Remove(wood);
             
             this.m_woodPool.Add(wood);
-
         }
 
-        public void Init(Transform woodParent, GameObject woodPre)
+        public void OnStart(Transform woodParent, GameObject woodPre)
         {
             m_resAdapter = new ResAdapter();
             m_woodParent = woodParent;
             m_woodPre = woodPre;
             // m_woodPre = m_resAdapter.Load<GameObject>("");
+            m_woodListArr = new List<List<List<WoodType>>>
+            {
+                this.m_woodList1, this.m_woodList2, this.m_woodList3, this.m_woodList4
+                , this.m_woodList5, this.m_woodList6
+            };
+        }
+
+        public void Clear()
+        {
+            for (int i = m_woodActiveList.Count-1; i >= 0; i--)
+            {
+                Recycle(this.m_woodActiveList[i]);
+            }
+            this.m_woodActiveList.Clear();
+        }
+        
+        public void Init()
+        {
+            m_woodIndex = 0;
+            //每次随机一个木桩组合
+            this.m_woodList = new List<List<WoodType>>
+            {
+                new List<WoodType>{WoodType.EmptyUp, WoodType.Mid, WoodType.EmptyDown},
+                new List<WoodType>{WoodType.EmptyUp, WoodType.Mid, WoodType.EmptyDown},
+            };
         }
         
         public Wood CreateWood(WoodType type, int batch)
@@ -83,78 +160,45 @@ namespace Game.Monos
         }
 
 
-        // public void Update()
-        // {
-        //     foreach (var wood in m_woodActiveList)
-        //     {
-        //         wood.Update();
-        //     }
-        // }
         public List<WoodType> CreateWoodBronType()
         {
             if (m_woodIndex == this.m_woodList.Count)
             {
                 this.m_woodIndex = 0;
+                
+                var index = m_random.Next(this.m_woodListArr.Count);
+                Debug.Log($"StyOnTheWood 新的木桩组诞生 index = {index}");
+                this.m_woodList = m_woodListArr[index];
+                
+                // ShuffleWoodListArr();
             }
 
             return m_woodList[m_woodIndex++];
         }
         
-        
-        /// <summary>
-        /// 木桩的出生位置,乱序的
-        /// </summary>
-        /// <returns></returns>
-        public List<WoodType> CreateWoodBronType(List<WoodType> existingWoodTypes)
+        //乱序，保证每个木桩组都能出现
+        void ShuffleWoodListArr()
         {
-            //初始情况
-            if (existingWoodTypes.Count <= 0)
+            Random random = new Random();
+            int n = this.m_woodListArr.Count;
+            for (int i = n - 1; i > 0; i--)
             {
-                return new List<WoodType> { WoodType.Mid };
+                // 生成一个 0 到 i 之间（包含 0 和 i）的随机索引
+                int j = random.Next(i + 1);
+
+                // 交换位置 i 和位置 j 上的元素
+                var temp = this.m_woodListArr[i];
+                this.m_woodListArr[i] = this.m_woodListArr[j];
+                this.m_woodListArr[j] = temp;
             }
 
-            //生成必须存在的可达木桩
-            WoodType requiredY = existingWoodTypes[m_random.Next(existingWoodTypes.Count)];
-            // while (requiredY == WoodType.Invalid)
-            // {
-            //     requiredY = existingWoodTypes[m_random.Next(existingWoodTypes.Count)];
-            // }
-            
-            List<WoodType> generatedList = new List<WoodType>{ requiredY };
-            //随机生产0~1个木头
-            int extraWoodCount = m_random.Next(0,2);
-            List<WoodType> availableYs = new List<WoodType> { WoodType.Up, WoodType.Mid, WoodType.Down };
-            for (int i = 0; i < extraWoodCount; i++)
+            this.m_woodList.Clear();
+            for (int i = 0; i < n; i++)
             {
-                //排除已生成的y
-                var remainingY = availableYs.Except(generatedList).ToList();
-                if (remainingY.Count == 0)
-                {
-                    break;
-                }
-
-                WoodType type = remainingY[m_random.Next(remainingY.Count)];
-                generatedList.Add(type);
+                this.m_woodList.AddRange(this.m_woodListArr[i]);
             }
-
-            //连续多次生成了上下两个，则必须加一个中间位置 todo
-            //----- 第5次随机生成在这儿
-            //-  
-            //----
-            if (generatedList.Count == 2 && generatedList[0] != WoodType.Mid && generatedList[1] != WoodType.Mid)
-            {
-                if (++m_misdirectCount == 3)
-                {
-                    m_misdirectCount = 0;
-                    generatedList.Add(WoodType.Mid);
-                }
-            }
-            else
-            {
-                m_misdirectCount = 0;
-            }
-            return generatedList;
         }
+    
     }
 
 }

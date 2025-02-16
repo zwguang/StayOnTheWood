@@ -3,7 +3,9 @@
     public enum E
     {
         PlayerDeath,
-        PlayerScore
+        PlayerScore,
+        GameStart,
+        GameOver
     }
 
     public enum WoodType

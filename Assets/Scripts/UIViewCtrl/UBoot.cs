@@ -16,6 +16,7 @@ public class UBoot : MonoBehaviour
     {
         EventManager.Instance.On((int)E.PlayerScore, OnPlayerSore);
         EventManager.Instance.On((int)E.PlayerDeath, OnPlayerDeath);
+        EventManager.Instance.On((int)E.GameStart, OnGameStart);
     }
 
     // Start is called before the first frame update
@@ -30,6 +31,11 @@ public class UBoot : MonoBehaviour
         
     }
 
+    private void OnGameStart()
+    {
+        this.m_scoreTmp.text = $"得分：0";
+
+    }
     private void OnPlayerSore()
     {
         this.m_scoreTmp.text = $"得分：{GameManager.Instance.soreNum.ToString()}";
