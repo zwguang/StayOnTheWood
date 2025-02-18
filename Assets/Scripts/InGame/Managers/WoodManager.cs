@@ -134,12 +134,14 @@ namespace Game.Monos
             this.m_woodActiveList.Clear();
         }
         
-        public void Init()
+        public void OnInit()
         {
             m_woodIndex = 0;
             //每次随机一个木桩组合
             this.m_woodList = new List<List<WoodType>>
             {
+                new List<WoodType>{WoodType.EmptyUp, WoodType.EmptyMid, WoodType.EmptyDown},
+                new List<WoodType>{WoodType.EmptyUp, WoodType.BornPlayerMid, WoodType.EmptyDown},
                 new List<WoodType>{WoodType.EmptyUp, WoodType.Mid, WoodType.EmptyDown},
                 new List<WoodType>{WoodType.EmptyUp, WoodType.Mid, WoodType.EmptyDown},
             };

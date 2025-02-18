@@ -16,6 +16,7 @@
         EmptyUp,
         EmptyMid,
         EmptyDown,
+        BornPlayerMid,
         Invalid
     }
 }

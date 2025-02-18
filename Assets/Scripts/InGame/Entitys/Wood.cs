@@ -53,6 +53,7 @@ namespace Game
                     break;
                 }
                 case WoodType.Mid:
+                case WoodType.BornPlayerMid:
                 {
                     startPosY = 0;
                     m_sprite.color = whiteColor;

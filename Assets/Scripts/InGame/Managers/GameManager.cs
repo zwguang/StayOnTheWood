@@ -15,9 +15,6 @@ namespace Game
         public int soreMaxBatch = 0;
         public int soreNum = 0;
             
-        //速度加成
-        private float m_speedRate = 3;
-
         private float m_timeCount = 0;
 
         public void OnStart()
@@ -36,7 +33,7 @@ namespace Game
             }
         }
 
-        public void Init()
+        public void OnInit()
         {
             speed = StartSpeed;
 

@@ -23,16 +23,11 @@ public class ViewCtrlInGameMainPanel : MonoBehaviour
         m_homeBtn.onClick.AddListener(OnHomeBtnClicked);
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void OnDestroy()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        EventManager.Instance.Off((int)E.PlayerScore, OnPlayerSore);
+        EventManager.Instance.Off((int)E.PlayerDeath, OnPlayerDeath);
+        EventManager.Instance.Off((int)E.GameStart, OnGameStart);
     }
 
     private void OnGameStart()
