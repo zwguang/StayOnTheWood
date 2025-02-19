@@ -58,27 +58,54 @@ namespace Game
 
         public void Move(KeyCode type)
         {
+            switch (type)
+            {
+                case KeyCode.A:
+                {
+                    this.Move(PlayerDirType.Left);
+                    break;
+                }
+                case KeyCode.D:
+                {
+                    this.Move(PlayerDirType.Right);
+                    break;
+                }
+                case KeyCode.W:
+                {
+                    this.Move(PlayerDirType.Up);
+                    break;
+                }
+                case KeyCode.S:
+                {
+                    this.Move(PlayerDirType.Down);
+                    break;
+                }
+            }
+        }
+        
+        public void Move(PlayerDirType type)
+        {
             var dirX = GameManager.Instance.StartSpeed;
             var dirY = GameManager.Instance.woodGapY;
             Vector3 moveDir = Vector2.zero;
             switch (type)
             {
-                case KeyCode.A:
+                case PlayerDirType.Left:
                 {
                     moveDir = new Vector2(-dirX, 0);
                     break;
                 }
-                case KeyCode.D:
+                case PlayerDirType.Right:
                 {
                     moveDir = new Vector2(dirX, 0);
                     break;
                 }
-                case KeyCode.W:
+                case PlayerDirType.Up:
                 {
                     moveDir = new Vector2(0, dirY);
                     break;
                 }
-                case KeyCode.S:
+                case PlayerDirType.Down:
                 {
                     moveDir = new Vector2(0, -dirY);
                     break;
@@ -89,5 +116,7 @@ namespace Game
             transform.Translate(moveDir);
         }
     }
+    
+    
 
 }

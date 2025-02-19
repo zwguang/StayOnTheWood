@@ -28,6 +28,7 @@ namespace Game
         {
             EventManager.Instance.On((int)E.PlayerScore, this.OnPlayerScore);
             EventManager.Instance.On((int)E.PlayerDeath, this.OnPlayerDie);
+            EventManager.Instance.On<PlayerDirType>((int)E.PlayerMove, this.OnPlayerMove);
             EventManager.Instance.On((int)E.GameStart, GameStart);
         }
 
@@ -46,6 +47,8 @@ namespace Game
             
             EventManager.Instance.Off((int)E.PlayerScore, OnPlayerScore);
             EventManager.Instance.Off((int)E.PlayerDeath, OnPlayerDie);
+            EventManager.Instance.Off<PlayerDirType>((int)E.PlayerMove, this.OnPlayerMove);
+
             EventManager.Instance.Off((int)E.GameStart, GameStart);
         }
 
@@ -153,6 +156,11 @@ namespace Game
         void OnPlayerDie()
         {
             
+        }
+
+        void OnPlayerMove(PlayerDirType dir)
+        {
+            m_player.Move(dir);
         }
     }
 
