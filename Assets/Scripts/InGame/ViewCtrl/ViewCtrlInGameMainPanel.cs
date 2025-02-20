@@ -16,18 +16,18 @@ public class ViewCtrlInGameMainPanel : MonoBehaviour
     [SerializeField] private Button m_homeBtn;
     private void Awake()
     {
-        EventManager.Instance.On((int)E.PlayerScore, OnPlayerSore);
-        EventManager.Instance.On((int)E.PlayerDeath, OnPlayerDeath);
-        EventManager.Instance.On((int)E.GameStart, OnGameStart);
+        EventManager.Instance.On((int)EventID.PlayerScore, OnPlayerSore);
+        EventManager.Instance.On((int)EventID.PlayerDeath, OnPlayerDeath);
+        EventManager.Instance.On((int)EventID.GameStart, OnGameStart);
         
         m_homeBtn.onClick.AddListener(OnHomeBtnClicked);
     }
 
     private void OnDestroy()
     {
-        EventManager.Instance.Off((int)E.PlayerScore, OnPlayerSore);
-        EventManager.Instance.Off((int)E.PlayerDeath, OnPlayerDeath);
-        EventManager.Instance.Off((int)E.GameStart, OnGameStart);
+        EventManager.Instance.Off((int)EventID.PlayerScore, OnPlayerSore);
+        EventManager.Instance.Off((int)EventID.PlayerDeath, OnPlayerDeath);
+        EventManager.Instance.Off((int)EventID.GameStart, OnGameStart);
     }
 
     private void OnGameStart()

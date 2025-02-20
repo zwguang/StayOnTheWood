@@ -54,6 +54,7 @@
     <Compile Include="Assets\Scripts\InGame\Managers\WoodManager.cs" />
     <Compile Include="Assets\Scripts\InGame\Entitys\Player.cs" />
     <Compile Include="Assets\Scripts\InGame\Managers\GameManager.cs" />
+    <Compile Include="Assets\Scripts\InGame\ViewCtrl\ViewCtrlJoyStick.cs" />
     <Compile Include="Assets\Scripts\InGame\ViewCtrl\ViewCtrlInGameMainPanel.cs" />
     <None Include="Assets\Scripts\InGame\InGame.asmdef" />
     <Reference Include="UnityEngine">

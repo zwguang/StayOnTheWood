@@ -1,11 +1,14 @@
 ﻿
-    public enum E
+    public enum EventID
     {
         PlayerDeath,
         PlayerScore,
         PlayerMove,
         GameStart,
-        GameOver
+        GameOver,
+        JoyStickDroging,
+        JoyStickDrogUp,
+        JumpBtnClicked
     }
 
     public enum WoodType

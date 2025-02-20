@@ -31,6 +31,6 @@ public class ViewCtrlGameOverPop : MonoBehaviour
     private void OnRestartBtnClicked()
     {
         this.gameObject.SetActive(false);
-        EventManager.Instance.Trigger((int)E.GameStart);
+        EventManager.Instance.Trigger((int)EventID.GameStart);
     }
 }

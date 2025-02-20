@@ -39,7 +39,7 @@ namespace Game
                 {
                     GameManager.Instance.soreMaxBatch = wood.batch;
                     GameManager.Instance.soreNum++;
-                    EventManager.Instance.Trigger((int)E.PlayerScore);
+                    EventManager.Instance.Trigger((int)EventID.PlayerScore);
                     this.transform.localPosition = wood.transform.localPosition;
                 }
                 
@@ -53,7 +53,7 @@ namespace Game
         private void GameOver()
         {
             GameManager.Instance.PlayerDeath();
-            EventManager.Instance.Trigger((int)E.PlayerDeath);
+            EventManager.Instance.Trigger((int)EventID.PlayerDeath);
         }
 
         public void Move(KeyCode type)

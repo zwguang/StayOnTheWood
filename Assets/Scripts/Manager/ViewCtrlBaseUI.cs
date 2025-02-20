@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class ViewCtrlBase : MonoBehaviour
+public class ViewCtrlBaseUI : MonoBehaviour
 {
     public void BindEvent(Button btn, UnityAction onClicked, AudioType type = AudioType.common_click)
         {

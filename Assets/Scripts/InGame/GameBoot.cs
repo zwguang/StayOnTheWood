@@ -23,13 +23,16 @@ namespace Game
         private int m_batchCount = 0;
         List<WoodType> m_woodList = new List<WoodType>();
 
+        private PlayerDirType m_playerDirType = PlayerDirType.Right;
 
         private void Awake()
         {
-            EventManager.Instance.On((int)E.PlayerScore, this.OnPlayerScore);
-            EventManager.Instance.On((int)E.PlayerDeath, this.OnPlayerDie);
-            EventManager.Instance.On<PlayerDirType>((int)E.PlayerMove, this.OnPlayerMove);
-            EventManager.Instance.On((int)E.GameStart, GameStart);
+            EventManager.Instance.On((int)EventID.PlayerScore, this.OnPlayerScore);
+            EventManager.Instance.On((int)EventID.PlayerDeath, this.OnPlayerDie);
+            EventManager.Instance.On<PlayerDirType>((int)EventID.PlayerMove, this.OnPlayerMove);
+            EventManager.Instance.On((int)EventID.GameStart, GameStart);
+            EventManager.Instance.On<Vector2>((int)EventID.JoyStickDroging, OnJoyStickDroging);
+            EventManager.Instance.On((int)EventID.JumpBtnClicked, OnJumpBtnClicked);
         }
 
         // Start is called before the first frame update
@@ -45,11 +48,14 @@ namespace Game
         {
             Clear();
             
-            EventManager.Instance.Off((int)E.PlayerScore, OnPlayerScore);
-            EventManager.Instance.Off((int)E.PlayerDeath, OnPlayerDie);
-            EventManager.Instance.Off<PlayerDirType>((int)E.PlayerMove, this.OnPlayerMove);
+            EventManager.Instance.Off((int)EventID.PlayerScore, OnPlayerScore);
+            EventManager.Instance.Off((int)EventID.PlayerDeath, OnPlayerDie);
+            EventManager.Instance.Off<PlayerDirType>((int)EventID.PlayerMove, this.OnPlayerMove);
 
-            EventManager.Instance.Off((int)E.GameStart, GameStart);
+            EventManager.Instance.Off((int)EventID.GameStart, GameStart);
+            EventManager.Instance.Off<Vector2>((int)EventID.JoyStickDroging, OnJoyStickDroging);
+            EventManager.Instance.Off((int)EventID.JumpBtnClicked, OnJumpBtnClicked);
+
         }
 
         void GameStart()
@@ -161,6 +167,32 @@ namespace Game
         void OnPlayerMove(PlayerDirType dir)
         {
             m_player.Move(dir);
+        }
+
+        void OnJoyStickDroging(Vector2 inPut)
+        {
+
+            if (inPut == Vector2.up)
+            {
+                m_playerDirType = PlayerDirType.Up;
+            }
+            else if (inPut == Vector2.down)
+            {
+                m_playerDirType = PlayerDirType.Down;
+            }
+            else if (inPut == Vector2.left)
+            {
+                m_playerDirType = PlayerDirType.Left;
+            }
+            else if (inPut == Vector2.right)
+            {
+                m_playerDirType = PlayerDirType.Right;
+            }
+        }
+
+        void OnJumpBtnClicked()
+        {
+            m_player.Move(m_playerDirType);
         }
     }
 
