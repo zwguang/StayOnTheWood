@@ -56,6 +56,36 @@ namespace Game
             EventManager.Instance.Trigger((int)EventID.PlayerDeath);
         }
 
+        public void SetDir(PlayerDirType type)
+        {
+            var rotationZ = 0;
+            switch (type)
+            {
+                case PlayerDirType.Left:
+                {
+                    rotationZ = 180;
+                    break;
+                }
+                case PlayerDirType.Right:
+                {
+                    rotationZ = 0;
+                    break;
+                }
+                case PlayerDirType.Up:
+                {
+                    rotationZ = 90;
+                    break;
+                }
+                case PlayerDirType.Down:
+                {
+                    rotationZ = 270;
+                    break;
+                }
+            }
+
+            this.transform.localRotation = Quaternion.Euler(0, 0, rotationZ);
+        }
+        
         public void Move(KeyCode type)
         {
             switch (type)
@@ -112,8 +142,8 @@ namespace Game
                 }
             }
 
-            // transform.localPosition += moveDir;
-            transform.Translate(moveDir);
+            transform.localPosition += moveDir;
+            // transform.Translate(moveDir); //todo 跟Rotatio有关系？
         }
     }
     

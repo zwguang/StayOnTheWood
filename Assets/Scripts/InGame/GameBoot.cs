@@ -82,6 +82,7 @@ namespace Game
 
             m_createWoodTimeCount = m_createWoodInterval;
             m_batchCount = 0;
+            m_playerDirType = PlayerDirType.Right;
         }
 
         // Update is called once per frame
@@ -112,6 +113,11 @@ namespace Game
             else if (Input.GetKeyDown(KeyCode.S))
             {
                 type = KeyCode.S;
+            }
+            else if (Input.GetKeyDown(KeyCode.Space))
+            {
+                this.OnJumpBtnClicked();
+                return;
             }
             else
             {
@@ -188,6 +194,7 @@ namespace Game
             {
                 m_playerDirType = PlayerDirType.Right;
             }
+            m_player.SetDir(m_playerDirType);
         }
 
         void OnJumpBtnClicked()

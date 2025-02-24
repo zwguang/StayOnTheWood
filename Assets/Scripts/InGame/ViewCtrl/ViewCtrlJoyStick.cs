@@ -69,7 +69,7 @@ public class JoyStick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
         // var canvasGo = GameObject.Find("GameRoot/UIRoot");
         // var canvas = GameObject.Find("GameBoot/UIRoot").GetComponent<Canvas>();//UIManager.Instance.canvasRoot;
         
-        Vector2 position = Camera.main.WorldToScreenPoint(_dotParentRt.position);//将ui坐标中的background映射到屏幕中的实际坐标
+        Vector2 position = _uiCamera.WorldToScreenPoint(_dotParentRt.position);//将ui坐标中的background映射到屏幕中的实际坐标
         Vector2 radius = _dotParentRt.sizeDelta / 2;
         input = (eventData.position - position) / (radius * _canvas.scaleFactor);//将屏幕中的触点和background的距离映射到ui空间下实际的距离
         HandleInput(input.magnitude, input.normalized, radius);        //对输入进行限制
