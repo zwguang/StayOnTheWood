@@ -88,6 +88,11 @@ namespace Game
         // Update is called once per frame
         void Update()
         {
+            if (GameManager.Instance.GameOver)
+            {
+                return;
+            }
+            
             OnKeyDown();
 
             CreatWood();   
@@ -167,7 +172,7 @@ namespace Game
         
         void OnPlayerDie()
         {
-            
+            GameManager.Instance.GameOver = true;
         }
 
         void OnPlayerMove(PlayerDirType dir)
@@ -177,7 +182,11 @@ namespace Game
 
         void OnJoyStickDroging(Vector2 inPut)
         {
-
+            if (GameManager.Instance.GameOver)
+            {
+                return;
+            }
+            
             if (inPut == Vector2.up)
             {
                 m_playerDirType = PlayerDirType.Up;
@@ -199,6 +208,11 @@ namespace Game
 
         void OnJumpBtnClicked()
         {
+            if (GameManager.Instance.GameOver)
+            {
+                return;
+            }
+            
             m_player.Move(m_playerDirType);
         }
     }
