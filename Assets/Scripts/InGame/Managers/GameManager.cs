@@ -9,7 +9,8 @@ namespace Game
     public class GameManager : Singleton<GameManager>
     {
         private float m_timeCount = 0;
-
+        private float m_addSpeed = 0.1f;
+        
         public float StartSpeed = 3; //木头x间距/初始速度
         public float woodGapY = 2.5f;//木头Y间距
 
@@ -58,7 +59,7 @@ namespace Game
 
         public void AddSpeed()
         {
-            speed += 0.1f;
+            speed += m_addSpeed;
             Debug.Log($"StyOnTheWood 水流速度：{speed}");
         }
     }
