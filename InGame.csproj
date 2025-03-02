@@ -45,13 +45,13 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.53f1c1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\InGame\ViewCtrl\ViewCtrlOperiationPanel.cs" />
     <Compile Include="Assets\Scripts\InGame\Entitys\Wood.cs" />
     <Compile Include="Assets\Scripts\InGame\Entitys\Water.cs" />
-    <Compile Include="Assets\Scripts\InGame\GameBoot.cs" />
     <Compile Include="Assets\Scripts\InGame\ViewCtrl\ViewCtrlGameOverPop.cs" />
     <Compile Include="Assets\Scripts\InGame\Entitys\BasePooled.cs" />
     <Compile Include="Assets\Scripts\InGame\Managers\WoodManager.cs" />
+    <Compile Include="Assets\Scripts\InGame\GameRoot.cs" />
+    <Compile Include="Assets\Scripts\InGame\ViewCtrl\ViewCtrlUIOperiationPanel.cs" />
     <Compile Include="Assets\Scripts\InGame\Entitys\Player.cs" />
     <Compile Include="Assets\Scripts\InGame\Managers\GameManager.cs" />
     <Compile Include="Assets\Scripts\InGame\ViewCtrl\ViewCtrlJoyStick.cs" />

@@ -8,12 +8,11 @@ using UnityEngine;
 
 namespace Game
 {
-    public class GameBoot : MonoBehaviour
+    public class GameRoot : MonoBehaviour
     {
         [SerializeField] private GameObject m_woodPre;
         [SerializeField] private GameObject m_playerPre;
         [SerializeField] private Transform m_woodParentTrans;
-        [SerializeField] private TextMeshProUGUI m_scoreText;
 
         private Player m_player;
 
@@ -38,6 +37,9 @@ namespace Game
         // Start is called before the first frame update
         void Start()
         {
+            UIManager.Instance.ShowPanel(ResPath.prefabPath_InGameMainPanel);
+            UIManager.Instance.ShowPanel(ResPath.prefabPath_OperiationPanel);
+
             GameManager.Instance.OnStart();
             WoodManager.Instance.OnStart(this.m_woodParentTrans, this.m_woodPre);
 
@@ -47,7 +49,7 @@ namespace Game
         private void OnDestroy()
         {
             Clear();
-            
+
             EventManager.Instance.Off((int)EventID.PlayerScore, OnPlayerScore);
             EventManager.Instance.Off((int)EventID.PlayerDeath, OnPlayerDie);
             EventManager.Instance.Off<PlayerDirType>((int)EventID.PlayerMove, this.OnPlayerMove);
@@ -55,7 +57,6 @@ namespace Game
             EventManager.Instance.Off((int)EventID.GameStart, GameStart);
             EventManager.Instance.Off<Vector2>((int)EventID.JoyStickDroging, OnJoyStickDroging);
             EventManager.Instance.Off((int)EventID.JumpBtnClicked, OnJumpBtnClicked);
-
         }
 
         void GameStart()
@@ -63,7 +64,7 @@ namespace Game
             Clear();
             Init();
         }
-        
+
         void Clear()
         {
             WoodManager.Instance.Clear();
@@ -74,7 +75,7 @@ namespace Game
                 m_player.gameObject.SetActive(false);
             }
         }
-        
+
         private void Init()
         {
             GameManager.Instance.OnInit();
@@ -88,15 +89,10 @@ namespace Game
         // Update is called once per frame
         void Update()
         {
-            if (GameManager.Instance.GameOver)
-            {
-                return;
-            }
-            
             OnKeyDown();
 
-            CreatWood();   
-            
+            CreatWood();
+
             GameManager.Instance.Update();
         }
 
@@ -161,18 +157,17 @@ namespace Game
                 m_player = GameObject.Instantiate(m_playerPre).GetComponent<Player>();
                 m_player.transform.SetParent(m_woodParentTrans, true);
             }
+
             m_player.gameObject.SetActive(true);
             m_player.transform.localPosition = new Vector3(L.WoodStartPosX, 0, 0);
         }
-        
+
         void OnPlayerScore()
         {
-            
         }
-        
+
         void OnPlayerDie()
         {
-            GameManager.Instance.GameOver = true;
         }
 
         void OnPlayerMove(PlayerDirType dir)
@@ -182,11 +177,6 @@ namespace Game
 
         void OnJoyStickDroging(Vector2 inPut)
         {
-            if (GameManager.Instance.GameOver)
-            {
-                return;
-            }
-            
             if (inPut == Vector2.up)
             {
                 m_playerDirType = PlayerDirType.Up;
@@ -203,18 +193,13 @@ namespace Game
             {
                 m_playerDirType = PlayerDirType.Right;
             }
+
             m_player.SetDir(m_playerDirType);
         }
 
         void OnJumpBtnClicked()
         {
-            if (GameManager.Instance.GameOver)
-            {
-                return;
-            }
-            
             m_player.Move(m_playerDirType);
         }
     }
-
 }

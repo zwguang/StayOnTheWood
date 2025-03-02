@@ -5,30 +5,21 @@ using GDK;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ViewCtrlStartPanel : MonoBehaviour
+public class ViewCtrlStartPanel : ViewCtrlUIBase
 {
-    [SerializeField]
-    private Button m_startBtn;
+    [SerializeField] private Button m_startBtn;
 
-    private void Awake()
+    public override void onAwake()
     {
+        SDebug.Log("ViewCtrlStartPanel onAwake");
+        // OnButtonClick(m_startBtn, OnStartBtnCLicked);
         m_startBtn.onClick.AddListener(OnStartBtnCLicked);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     void OnStartBtnCLicked()
     {
+        SDebug.Log("ViewCtrlStartPanel OnStartBtnCLicked");
+
         GameSceneManager.Instance.ChangeSceneByName("InGameScene");
     }
 }

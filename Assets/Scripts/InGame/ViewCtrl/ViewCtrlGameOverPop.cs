@@ -6,31 +6,33 @@ using GDK;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ViewCtrlGameOverPop : MonoBehaviour
+public class ViewCtrlGameOverPop : ViewCtrlUIBase
 {
-    [SerializeField]
-    private Button m_restartBtn;
+    [SerializeField] private Button m_restartBtn;
 
-    private void Awake()
+    public override void onAwake()
     {
-        m_restartBtn.onClick.AddListener(OnRestartBtnClicked);
+        OnButtonClick(m_restartBtn, OnRestartBtnClicked);
+    }
+
+    public static void OpenUIPanel()
+    {
+        UIManager.Instance.ShowPanel(ResPath.prefabPath_GameOverPop);
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame
     void Update()
     {
-        
     }
 
     private void OnRestartBtnClicked()
     {
-        this.gameObject.SetActive(false);
+        UIManager.Instance.HidePanel();
         EventManager.Instance.Trigger((int)EventID.GameStart);
     }
 }
