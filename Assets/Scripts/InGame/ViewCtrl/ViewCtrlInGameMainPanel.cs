@@ -39,6 +39,6 @@ public class ViewCtrlInGameMainPanel : ViewCtrlUIBase
 
     void OnHomeBtnClicked()
     {
-        GameSceneManager.Instance.ChangeSceneByName("HomeScene");
+        GameSceneManager.Instance.ChangeSceneByName("HallScene");
     }
 }

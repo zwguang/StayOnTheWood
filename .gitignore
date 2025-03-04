@@ -33591,3 +33591,6 @@ Temp/workerlic
 Library/Bee
 Library
 build
+Assets/Samples
+Assets/Samples.meta
+AimingRig.csproj

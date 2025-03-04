@@ -20,6 +20,7 @@ public class ViewCtrlStartPanel : ViewCtrlUIBase
     {
         SDebug.Log("ViewCtrlStartPanel OnStartBtnCLicked");
 
+        UIManager.Instance.HidePanel();
         GameSceneManager.Instance.ChangeSceneByName("InGameScene");
     }
 }
