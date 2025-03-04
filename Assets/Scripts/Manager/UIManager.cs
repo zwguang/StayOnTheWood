@@ -193,7 +193,7 @@ public class UIManager : Singleton<UIManager>
     }
 
     //除了常驻界面，清除其他所有界面
-    public void ClearAll()
+    public void ClearAllWithoutResident()
     {
         ClearAllTips();
 
