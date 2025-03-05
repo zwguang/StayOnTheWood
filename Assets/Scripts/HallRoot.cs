@@ -14,7 +14,7 @@ public class HallRoot : MonoBehaviour
 
     private void OnDestroy()
     {
-        UIManager.Instance.ClearAllWithoutResident();
+        // UIManager.Instance.ClearAllWithoutResident();
     }
 
     // Update is called once per frame

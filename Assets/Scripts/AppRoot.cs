@@ -26,7 +26,7 @@ public class AppRoot : MonoBehaviour
 
     private void OnDestroy()
     {
-        UIManager.Instance.ClearAllWithoutResident();
+        // UIManager.Instance.ClearAllWithoutResident();
     }
 
     void InitApp()

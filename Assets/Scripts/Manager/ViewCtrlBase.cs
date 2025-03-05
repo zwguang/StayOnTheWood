@@ -6,14 +6,15 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class ViewCtrlUIBase : MonoBehaviour
+public class ViewCtrlBase : MonoBehaviour
 {
     #region 配置
 
+    [HideInInspector]
     //在ui管理类中，加载prefab后设置
     public string prefabPath = "";
 
-    public UILayer layer = UILayer.Invalid;
+    [HideInInspector] public UILayer layer = UILayer.Invalid;
 
     //关闭按钮时 是否立即销毁
     public bool bDestroyWhenClose = false;

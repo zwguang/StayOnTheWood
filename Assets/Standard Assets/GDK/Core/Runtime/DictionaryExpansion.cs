@@ -10,7 +10,7 @@ namespace GDK
     /// 2.静态方法
     /// 3.第一个参数指定方法所操作的类型，此参数前必须加this
     /// </summary>
-    public static class DictionaryExpand
+    public static class DictionaryExpansion
     {
         /// <summary>
         /// 第一个参数代表要查找的字典
@@ -22,5 +22,4 @@ namespace GDK
             return value;
         }
     }
-
 }

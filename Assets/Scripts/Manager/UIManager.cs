@@ -2,6 +2,7 @@
 using Game;
 using GDK;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum UILayer
 {
@@ -24,11 +25,12 @@ public enum UILayer
 
 public class UIManager : Singleton<UIManager>
 {
-    private Dictionary<string, ViewCtrlUIBase> m_panelDict = new Dictionary<string, ViewCtrlUIBase>(); //存储所有面板
-    private List<ViewCtrlUIBase> m_panelStack = new List<ViewCtrlUIBase>(); //管理所有显示的面板
+    private Dictionary<string, ViewCtrlBase> m_panelActiveDict = new Dictionary<string, ViewCtrlBase>(); //显示的面板
+    private Dictionary<string, ViewCtrlBase> m_panelHideDict = new Dictionary<string, ViewCtrlBase>(); //隐藏的面板
 
-    private string m_curPrefabPath;
-    List<ViewCtrlUIBase> _tipsList = new List<ViewCtrlUIBase>();
+    private List<KeyValuePair<string, ViewCtrlBase>> m_listTemp = new List<KeyValuePair<string, ViewCtrlBase>>();
+
+    List<ViewCtrlBase> _tipsList = new List<ViewCtrlBase>(); //todo tips该怎么处理
 
     public Transform popLayer = null;
     public Transform menuLayer = null;
@@ -41,24 +43,28 @@ public class UIManager : Singleton<UIManager>
     public Transform parent = null;
 
 
-    List<ViewCtrlUIBase> GetPanelStack(string prefabPath)
-    {
-        // var panelStack = _panelStackDic.GetValue(prefabPath.layer);
-        // if (panelStack == null)
-        // {
-        //     panelStack = new List<ViewCtrlUIBase>();
-        //     _panelStackDic[prefabPath.layer] = panelStack;
-        // }
-
-        return m_panelStack;
-    }
-
-    private ViewCtrlUIBase CreatePanel(string prefabPath, UIAdapter.CreateCallBack callBack = null)
+    private ViewCtrlBase CreatePanel(string prefabPath, UIAdapter.CreateCallBack callBack = null)
     {
         var prefab = ResManager.Instance.Load<GameObject>(prefabPath);
         GameObject panelObj = GameObject.Instantiate(prefab) as GameObject;
-        var viewCtrl = panelObj.GetComponent<ViewCtrlUIBase>();
+        var viewCtrl = panelObj.GetComponent<ViewCtrlBase>();
         viewCtrl.prefabPath = prefabPath;
+
+        //添加canvas
+        var canvas = viewCtrl.GetComponent<Canvas>();
+        if (!canvas)
+        {
+            viewCtrl.gameObject.AddComponent<Canvas>();
+        }
+
+        var gr = viewCtrl.GetComponent<GraphicRaycaster>();
+        if (!gr)
+        {
+            viewCtrl.gameObject.AddComponent<GraphicRaycaster>();
+        }
+
+        //设置order
+
         panelObj.transform.SetParent(GetParent(viewCtrl.layer), false);
         if (viewCtrl.layer == UILayer.Tips)
         {
@@ -66,7 +72,7 @@ public class UIManager : Singleton<UIManager>
         }
         else
         {
-            m_panelDict.Add(prefabPath, viewCtrl);
+            m_panelActiveDict.Add(prefabPath, viewCtrl);
         }
 
         callBack?.Invoke(prefabPath, prefab);
@@ -74,106 +80,73 @@ public class UIManager : Singleton<UIManager>
         return viewCtrl;
     }
 
-    /// <summary>
-    /// 获取面板
-    /// 1.如果存储panel的字典为空，则创建一个
-    /// 2.从字典获取对应panel类型的panel
-    /// 3.如果没获取到此类型的panel，则实例化一个，反之直接返回
-    /// </summary>
-    /// <param name="panelType"></param>
-    private ViewCtrlUIBase GetPanel(string prefabPath, UIAdapter.CreateCallBack callBack, out bool bExist)
+    private ViewCtrlBase GetPanel(string prefabPath, UIAdapter.CreateCallBack callBack = null)
     {
-        ViewCtrlUIBase panel = m_panelDict.GetValue(prefabPath);
-        bExist = true;
-        if (panel == null)
+        ViewCtrlBase viewCtrl = null;
+        //从显示界面找
+        if (this.m_panelActiveDict.ContainsKey(prefabPath))
         {
-            bExist = false;
-            panel = CreatePanel(prefabPath, callBack);
+            viewCtrl = this.m_panelActiveDict.GetValue(prefabPath);
+            viewCtrl.transform.SetAsFirstSibling();
+            return viewCtrl;
         }
 
-        return panel;
-    }
+        //从隐藏界面里找
+        if (this.m_panelHideDict.ContainsKey(prefabPath))
+        {
+            viewCtrl = this.m_panelHideDict.GetValue(prefabPath);
+            this.m_panelHideDict.Remove(prefabPath);
+            this.m_panelActiveDict.Add(prefabPath, viewCtrl);
+            viewCtrl.gameObject.SetActive(true);
+            return viewCtrl;
+        }
 
+        return null;
+    }
 
     /// <summary>
     /// 页面入栈，显示在界面上
     /// 针对view、menu、pop有不同的逻辑处理
     /// </summary>
-    public ViewCtrlUIBase ShowPanel(string prefabPath, UIAdapter.CreateCallBack callBack = null)
+    public ViewCtrlBase ShowPanel(string prefabPath, UIAdapter.CreateCallBack callBack = null)
     {
-        var panelStack = GetPanelStack(prefabPath);
-
-        //栈里有页面 暂停已有
-        if (panelStack.Count > 0)
+        ViewCtrlBase viewCtrl = this.GetPanel(prefabPath, callBack);
+        if (viewCtrl == null)
         {
-            ViewCtrlUIBase topPanel = panelStack.Peek();
-
-            //todo，弹窗出现会干掉view
-            // if (topPanel.bDestroy)
-            // {
-            //     GameObject.Destroy(topPanel.gameObject);
-            // }
-            // else
-            // {
-            //     topPanel.OnPause();
-            // }
-
-            topPanel.OnPause();
+            //创建一个
+            viewCtrl = this.CreatePanel(prefabPath, callBack);
         }
 
-        bool bExist = true;
-
-        //显示新页面
-        ViewCtrlUIBase panel = GetPanel(prefabPath, callBack, out bExist);
-        //已经存在的界面，重新整理在栈中的位置
-        if (bExist)
-        {
-            panelStack.Remove(panel);
-            panel.transform.SetAsLastSibling();
-        }
-
-        panelStack.Add(panel);
-        m_curPrefabPath = prefabPath;
-
-        panel.OnEnter();
-        return panel;
+        return viewCtrl;
     }
 
 
     /// <summary>
     /// 移除页面, 如果菜单界面夹杂在中间位置，可能无法触发resume
     /// </summary>
-    public void HidePanel()
+    public void HidePanel(string prefabPath)
     {
-        var panelStack = GetPanelStack(m_curPrefabPath);
-        //弹出栈顶元素
-        if (panelStack.Count > 0)
+        if (this.m_panelActiveDict.ContainsKey(prefabPath))
         {
-            ViewCtrlUIBase topPanel = panelStack.Pop();
-            if (topPanel.bDestroyWhenClose)
-            {
-                GameObject.Destroy(topPanel.gameObject);
-                m_panelDict.Remove(m_curPrefabPath);
-            }
-            else
-            {
-                topPanel.OnExit();
-            }
+            var vc = this.m_panelActiveDict.GetValue(prefabPath);
+            this.m_panelActiveDict.Remove(prefabPath);
+            this.m_panelHideDict.Add(prefabPath, vc);
+            vc.gameObject.SetActive(false);
         }
-
-        //顶部的第二个元素resume
-        if (panelStack.Count > 0)
+        else if (this.m_panelHideDict.ContainsKey(prefabPath))
         {
-            ViewCtrlUIBase topPanel = panelStack.Peek();
-            topPanel.OnResume();
-            m_curPrefabPath = topPanel.prefabPath;
+            SDebug.Log($"资源已经被隐藏 prefabPath = {prefabPath}");
+        }
+        else
+        {
+            SDebug.Log($"资源不存在 prefabPath = {prefabPath}");
         }
     }
 
 
-    public ViewCtrlUIBase ShowTips(string prefabPath)
+    public ViewCtrlBase ShowTips(string prefabPath)
     {
-        ViewCtrlUIBase panel = null;
+        ViewCtrlBase panel = null;
         for (int i = 0; i < _tipsList.Count; i++)
         {
             if (!_tipsList[i].gameObject.activeSelf)
@@ -197,20 +170,37 @@ public class UIManager : Singleton<UIManager>
     {
         ClearAllTips();
 
-        m_panelStack.Clear();
-        List<KeyValuePair<string, ViewCtrlUIBase>> list = new List<KeyValuePair<string, ViewCtrlUIBase>>();
-        foreach (var var in m_panelDict)
+        this.m_listTemp.Clear();
+        foreach (var var in m_panelActiveDict)
         {
             if (!var.Value.bResident)
             {
-                list.Add(var);
+                this.m_listTemp.Add(var);
             }
         }
 
-        for (int i = 0; i < list.Count; i++)
+        foreach (var var in m_panelHideDict)
         {
-            GameObject.Destroy(list[i].Value.gameObject);
-            m_panelDict.Remove(list[i].Key);
+            if (!var.Value.bResident)
+            {
+                this.m_listTemp.Add(var);
+            }
+        }
+
+        for (int i = 0; i < m_listTemp.Count; i++)
+        {
+            GameObject.Destroy(m_listTemp[i].Value.gameObject);
+
+            var key = m_listTemp[i].Key;
+            if (m_panelActiveDict.ContainsKey(key))
+            {
+                m_panelActiveDict.Remove(key);
+            }
+
+            if (m_panelHideDict.ContainsKey(key))
+            {
+                m_panelHideDict.Remove(key);
+            }
         }
     }
 

@@ -4,7 +4,7 @@ using GDK;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ViewCtrlUIOperiationPanel : ViewCtrlUIBase
+public class ViewCtrlOperiationPanel : ViewCtrlBase
 {
     [SerializeField] private Button m_upBtn;
     [SerializeField] private Button m_downBtn;

@@ -51,7 +51,9 @@ namespace Game
             Clear();
 
             EventManager.Instance.OffAll(this);
-            UIManager.Instance.ClearAllWithoutResident();
+            // UIManager.Instance.ClearAllWithoutResident();
+            UIManager.Instance.HidePanel(ResPath.prefabPath_InGameMainPanel);
+            UIManager.Instance.HidePanel(ResPath.prefabPath_OperiationPanel);
         }
 
         void GameStart()

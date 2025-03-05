@@ -5,7 +5,7 @@ using GDK;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ViewCtrlStartPanel : ViewCtrlUIBase
+public class ViewCtrlStartPanel : ViewCtrlBase
 {
     [SerializeField] private Button m_startBtn;
 
@@ -20,7 +20,7 @@ public class ViewCtrlStartPanel : ViewCtrlUIBase
     {
         SDebug.Log("ViewCtrlStartPanel OnStartBtnCLicked");
 
-        UIManager.Instance.HidePanel();
-        GameSceneManager.Instance.ChangeSceneByName("InGameScene");
+        UIManager.Instance.HidePanel(prefabPath);
+        GameSceneManager.Instance.ChangeSceneByName("GameScene");
     }
 }

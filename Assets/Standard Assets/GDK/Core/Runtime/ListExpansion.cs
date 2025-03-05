@@ -2,7 +2,7 @@
 
 namespace GDK
 {
-    public static class ListExpand
+    public static class ListExpansion
     {
         /// <summary>
         /// 返回末尾的元素，并从列表移除
@@ -16,11 +16,12 @@ namespace GDK
             {
                 return default(T); //对于引用类型，默认值将为null，而对于值类型，将为0（对于数字类型）或false（对于布尔类型）。
             }
+
             T item = list[list.Count - 1];
             list.Remove(item);
             return item;
         }
-        
+
         /// <summary>
         /// 返回末尾的元素，不从列表移除
         /// </summary>

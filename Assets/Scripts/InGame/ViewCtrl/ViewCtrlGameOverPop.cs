@@ -6,7 +6,7 @@ using GDK;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ViewCtrlGameOverPop : ViewCtrlUIBase
+public class ViewCtrlGameOverPop : ViewCtrlBase
 {
     [SerializeField] private Button m_restartBtn;
 
@@ -32,7 +32,7 @@ public class ViewCtrlGameOverPop : ViewCtrlUIBase
 
     private void OnRestartBtnClicked()
     {
-        UIManager.Instance.HidePanel();
+        UIManager.Instance.HidePanel(prefabPath);
         EventManager.Instance.Trigger((int)EventID.GameStart);
     }
 }

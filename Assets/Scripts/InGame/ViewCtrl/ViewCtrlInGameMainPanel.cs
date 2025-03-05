@@ -7,7 +7,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ViewCtrlInGameMainPanel : ViewCtrlUIBase
+public class ViewCtrlInGameMainPanel : ViewCtrlBase
 {
     [SerializeField] private TextMeshProUGUI m_scoreTmp;
 
@@ -39,7 +39,7 @@ public class ViewCtrlInGameMainPanel : ViewCtrlUIBase
 
     void OnHomeBtnClicked()
     {
-        UIManager.Instance.HidePanel();
+        UIManager.Instance.HidePanel(prefabPath);
         GameSceneManager.Instance.ChangeSceneByName("HallScene");
     }
 }
