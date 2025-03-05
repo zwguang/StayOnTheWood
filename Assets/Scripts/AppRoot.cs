@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Game;
@@ -21,6 +22,11 @@ public class AppRoot : MonoBehaviour
 
         //闪屏
         Splash();
+    }
+
+    private void OnDestroy()
+    {
+        UIManager.Instance.ClearAllWithoutResident();
     }
 
     void InitApp()

@@ -50,13 +50,8 @@ namespace Game
         {
             Clear();
 
-            EventManager.Instance.Off((int)EventID.PlayerScore, OnPlayerScore);
-            EventManager.Instance.Off((int)EventID.PlayerDeath, OnPlayerDie);
-            EventManager.Instance.Off<PlayerDirType>((int)EventID.PlayerMove, this.OnPlayerMove);
-
-            EventManager.Instance.Off((int)EventID.GameStart, GameStart);
-            EventManager.Instance.Off<Vector2>((int)EventID.JoyStickDroging, OnJoyStickDroging);
-            EventManager.Instance.Off((int)EventID.JumpBtnClicked, OnJumpBtnClicked);
+            EventManager.Instance.OffAll(this);
+            UIManager.Instance.ClearAllWithoutResident();
         }
 
         void GameStart()

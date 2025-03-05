@@ -40,7 +40,6 @@ public class ViewCtrlInGameMainPanel : ViewCtrlUIBase
     void OnHomeBtnClicked()
     {
         UIManager.Instance.HidePanel();
-        UIManager.Instance.ClearAllWithoutResident();
         GameSceneManager.Instance.ChangeSceneByName("HallScene");
     }
 }

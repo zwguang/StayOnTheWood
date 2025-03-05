@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Game;
@@ -9,6 +10,11 @@ public class HallRoot : MonoBehaviour
     void Start()
     {
         UIManager.Instance.ShowPanel(ResPath.prefabPath_StartPanel);
+    }
+
+    private void OnDestroy()
+    {
+        UIManager.Instance.ClearAllWithoutResident();
     }
 
     // Update is called once per frame
