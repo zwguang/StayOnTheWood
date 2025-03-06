@@ -7,7 +7,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ViewCtrlInGameMainPanel : ViewCtrlBase
+public class UIInGameMainPanel : UIBase
 {
     [SerializeField] private TextMeshProUGUI m_scoreTmp;
 
@@ -34,7 +34,7 @@ public class ViewCtrlInGameMainPanel : ViewCtrlBase
 
     private void OnPlayerDeath()
     {
-        ViewCtrlGameOverPop.OpenUIPanel();
+        UIGameOverPop.OpenUIPanel();
     }
 
     void OnHomeBtnClicked()

@@ -1,4 +1,4 @@
-﻿public class ViewCtrlBottomBase : ViewCtrlBase
+﻿public class UIBottomBase : UIBase
 {
     public override void onAwake()
     {

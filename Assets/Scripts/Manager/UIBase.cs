@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class ViewCtrlBase : MonoBehaviour
+public class UIBase : MonoBehaviour
 {
     #region 配置
 

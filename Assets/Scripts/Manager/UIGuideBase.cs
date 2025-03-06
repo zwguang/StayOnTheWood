@@ -1,4 +1,4 @@
-﻿public class ViewCtrlGuideBase : ViewCtrlBase
+﻿public class UIGuideBase : UIBase
 {
     public override void onAwake()
     {

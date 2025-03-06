@@ -1,4 +1,4 @@
-﻿public class ViewCtrlDialogBase : ViewCtrlPopupAnimBase
+﻿public class UIDialogBase : UIPopupAnimBase
 {
     public override void onAwake()
     {

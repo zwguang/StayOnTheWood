@@ -1,4 +1,4 @@
-﻿public class ViewCtrlPopBase : ViewCtrlPopupAnimBase
+﻿public class UIPopBase : UIPopupAnimBase
 {
     public override void onAwake()
     {

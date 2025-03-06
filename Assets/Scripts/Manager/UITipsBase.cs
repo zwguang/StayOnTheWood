@@ -1,4 +1,4 @@
-﻿public class ViewCtrlTipsBase : ViewCtrlBase
+﻿public class UITipsBase : UIBase
 {
     public override void onAwake()
     {

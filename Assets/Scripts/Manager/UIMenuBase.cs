@@ -1,4 +1,4 @@
-﻿public class ViewCtrlMenuBase : ViewCtrlBase
+﻿public class UIMenuBase : UIBase
 {
     public override void onAwake()
     {
