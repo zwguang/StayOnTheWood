@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Game;
 using GDK;
 using UnityEditor.UIElements;
@@ -35,16 +37,31 @@ public class UIManager : Singleton<UIManager>
 
     List<UIBase> _tipsList = new List<UIBase>(); //todo tips该怎么处理
 
-    public Transform popLayer = null;
-    public Transform menuLayer = null;
-    public Transform viewLayer = null;
-    public Transform tipsLayer = null;
-    public Transform transitionLayer = null;
-    public Transform handleLayer = null;
-    public Transform guideLayer = null;
-    public Transform topLayer = null;
-    public Transform parent = null;
+    //界面order间隔250
+    private static int SORTINGORDER_VIEW_GAP = 250;
+    //一个layer上最多显示20个界面
+    private static int UILAYER_VIEW_MAX = 20;
+    //layer的order的间隔
+    private static int UILAYER_GAP = UILAYER_VIEW_MAX * SORTINGORDER_VIEW_GAP;
+    
+    //每个layer最开始的sortorder
+    private int[] UILAYER_START_SORTORDER = new int[6]
+    {
+        0,
+        UILAYER_GAP * 1,
+        UILAYER_GAP * 2,
+        UILAYER_GAP * 3,
+        UILAYER_GAP * 4,
+        UILAYER_GAP * 5
+    };
 
+    protected override void OnConstruct()
+    {
+        base.OnConstruct();
+
+        int maxSortOrder = UILAYER_START_SORTORDER.Last() + UILAYER_GAP;
+        SDebug.Assert(maxSortOrder < Int16.MaxValue, "sortorder最大值不能超过 Int16.MaxValue");
+    }
 
     private UIBase CreatePanel(string prefabPath, UIAdapter.CreateCallBack callBack = null)
     {
