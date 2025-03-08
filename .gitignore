@@ -33594,3 +33594,4 @@ build
 Assets/Samples
 Assets/Samples.meta
 AimingRig.csproj
+*.csproj
