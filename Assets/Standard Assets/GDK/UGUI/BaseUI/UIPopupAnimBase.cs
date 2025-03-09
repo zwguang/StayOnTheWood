@@ -1,5 +1,4 @@
-﻿using Game;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class UIPopupAnimBase : UIBase
@@ -13,6 +12,6 @@ public class UIPopupAnimBase : UIBase
             image = gameObject.AddComponent<Image>();
         }
 
-        image.color = new Color(0.0f, 0.0f, 0.0f, L.MaskAlpha);
+        image.color = new Color(0.0f, 0.0f, 0.0f, 0.75f);
     }
 }
