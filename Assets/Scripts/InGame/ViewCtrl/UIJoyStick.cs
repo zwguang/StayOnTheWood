@@ -77,7 +77,7 @@ public class JoyStick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
         HandleInput(input.magnitude, input.normalized, radius); //对输入进行限制
 
         var temp = input;
-        EventManager.Instance.Trigger((int)EventID.JoyStickDroging, FixInput(temp));
+        SystemEventManager.Instance.Trigger((int)EventID.JoyStickDroging, FixInput(temp));
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -85,7 +85,7 @@ public class JoyStick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
         input = Vector2.zero;
         _dotRt.anchoredPosition = Vector2.zero;
         _dotParentRt.anchoredPosition = _fixedPos;
-        EventManager.Instance.Trigger((int)EventID.JoyStickDrogUp);
+        SystemEventManager.Instance.Trigger((int)EventID.JoyStickDrogUp);
     }
 
     public void HandleInput(float magnitude, Vector2 normalised, Vector2 radius)

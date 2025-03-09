@@ -26,19 +26,19 @@ namespace Game
 
         private void Awake()
         {
-            EventManager.Instance.On((int)EventID.PlayerScore, this.OnPlayerScore);
-            EventManager.Instance.On((int)EventID.PlayerDeath, this.OnPlayerDie);
-            EventManager.Instance.On<PlayerDirType>((int)EventID.PlayerMove, this.OnPlayerMove);
-            EventManager.Instance.On((int)EventID.GameStart, GameStart);
-            EventManager.Instance.On<Vector2>((int)EventID.JoyStickDroging, OnJoyStickDroging);
-            EventManager.Instance.On((int)EventID.JumpBtnClicked, OnJumpBtnClicked);
+            SystemEventManager.Instance.On((int)EventID.PlayerScore, this.OnPlayerScore);
+            SystemEventManager.Instance.On((int)EventID.PlayerDeath, this.OnPlayerDie);
+            SystemEventManager.Instance.On<PlayerDirType>((int)EventID.PlayerMove, this.OnPlayerMove);
+            SystemEventManager.Instance.On((int)EventID.GameStart, GameStart);
+            SystemEventManager.Instance.On<Vector2>((int)EventID.JoyStickDroging, OnJoyStickDroging);
+            SystemEventManager.Instance.On((int)EventID.JumpBtnClicked, OnJumpBtnClicked);
         }
 
         // Start is called before the first frame update
         void Start()
         {
-            UIManager.Instance.ShowPanel(ResPath.prefabPath_InGameMainPanel);
-            UIManager.Instance.ShowPanel(ResPath.prefabPath_OperiationPanel);
+            SystemUIManager.Instance.ShowPanel(ResPath.prefabPath_InGameMainPanel);
+            SystemUIManager.Instance.ShowPanel(ResPath.prefabPath_OperiationPanel);
 
             GameManager.Instance.OnStart();
             WoodManager.Instance.OnStart(this.m_woodParentTrans, this.m_woodPre);
@@ -50,10 +50,10 @@ namespace Game
         {
             Clear();
 
-            EventManager.Instance.OffAll(this);
+            SystemEventManager.Instance.OffAll(this);
             // UIManager.Instance.ClearAllWithoutResident();
-            UIManager.Instance.HidePanel(ResPath.prefabPath_InGameMainPanel);
-            UIManager.Instance.HidePanel(ResPath.prefabPath_OperiationPanel);
+            SystemUIManager.Instance.HidePanel(ResPath.prefabPath_InGameMainPanel);
+            SystemUIManager.Instance.HidePanel(ResPath.prefabPath_OperiationPanel);
         }
 
         void GameStart()
@@ -81,6 +81,10 @@ namespace Game
             m_createWoodTimeCount = m_createWoodInterval;
             m_batchCount = 0;
             m_playerDirType = PlayerDirType.Right;
+            if (m_player)
+            {
+                m_player.Init();
+            }
         }
 
         // Update is called once per frame
@@ -153,6 +157,7 @@ namespace Game
             {
                 m_player = GameObject.Instantiate(m_playerPre).GetComponent<Player>();
                 m_player.transform.SetParent(m_woodParentTrans, true);
+                m_player.Init();
             }
 
             m_player.gameObject.SetActive(true);

@@ -21,6 +21,7 @@ public class UIBase : MonoBehaviour
 
     //常驻界面
     public bool bResident = false;
+    public bool bNeedMask = false;
 
     #endregion
 
@@ -61,7 +62,8 @@ public class UIBase : MonoBehaviour
             m_adapterList.Clear();
         }
 
-        EventManager.Instance.OffAll(this);
+        SystemEventManager.Instance.OffAll(this);
+        SystemResManager.Instance.UnLoad(prefabPath);
 
         this.onDestroy();
     }
@@ -124,7 +126,7 @@ public class UIBase : MonoBehaviour
     {
     }
 
-    public void OnButtonClick(Button btn, UnityAction onClicked, AudioType type = AudioType.none)
+    public void OnButtonClick(Button btn, UnityAction onClicked)
     {
         if (btn == null)
         {
@@ -134,11 +136,11 @@ public class UIBase : MonoBehaviour
 
         btn.onClick.AddListener(() =>
         {
-            //播放音效
-            if (type != AudioType.none)
-            {
-                audioAdapter.PlayAudio(type);
-            }
+            // //播放音效
+            // if (type != AudioType.none)
+            // {
+            //     audioAdapter.PlayAudio(type);
+            // }
 
             onClicked();
         });

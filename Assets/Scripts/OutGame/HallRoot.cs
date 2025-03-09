@@ -9,7 +9,7 @@ public class HallRoot : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        UIManager.Instance.ShowPanel(ResPath.prefabPath_StartPanel);
+        UIStartPanel.OpenUIPanel();
     }
 
     private void OnDestroy()

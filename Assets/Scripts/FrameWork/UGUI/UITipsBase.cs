@@ -1,4 +1,6 @@
-﻿public class UITipsBase : UIBase
+﻿using GDK;
+
+public class UITipsBase : UIBase
 {
     public override void onAwake()
     {

@@ -45,7 +45,7 @@ public class AppRoot : MonoBehaviour
 
         // Instantiate(Resources.Load("Prefabs/UIRoot"));
 
-        GameSceneManager.Instance.ChangeSceneByName("HallScene");
+        SystemSceneManager.Instance.ChangeSceneByName("HallScene");
 
         // UIManager.Instance.ShowPanel(ResPath.prefabPath_StartPanel);
     }

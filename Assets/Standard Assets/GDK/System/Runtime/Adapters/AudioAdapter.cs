@@ -2,9 +2,8 @@
 
 public class AudioAdapter : BaseAdapter
 {
-    public void PlayAudio(AudioType type, bool bForce = false)
+    public void PlayAudio(bool bForce = false)
     {
-        
     }
 
     protected override void OnInvalid()

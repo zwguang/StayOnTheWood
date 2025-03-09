@@ -270,7 +270,7 @@ namespace Assets.Scripts.Common
                 {
                     System.Reflection.FieldInfo[] tar = ls.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
                     System.Reflection.FieldInfo[] ori = _default.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
-                    UnityEngine.Debug.Assert(tar.Length == ori.Length, "对象池属性Reset字段不匹配");
+                    SDebug.Assert(tar.Length == ori.Length, "对象池属性Reset字段不匹配");
                     for (int i = 0; i < ori.Length; i++)
                     {
                         var ignore = tar[i].GetCustomAttributes(typeof(IgnoreInPoolUse), true);
@@ -279,7 +279,7 @@ namespace Assets.Scripts.Common
 
                         if (tar[i].Name != ori[i].Name)
                         {
-                            UnityEngine.Debug.LogError(string.Format("[{0}]属性[{1}]不一致", ls.GetType().Name, tar[i].Name));
+                            SDebug.LogError(string.Format("[{0}]属性[{1}]不一致", ls.GetType().Name, tar[i].Name));
                         }
                         else
                         {
@@ -289,7 +289,7 @@ namespace Assets.Scripts.Common
                             {
                                 if ((tar[i].FieldType != ori[i].FieldType))
                                 {
-                                    UnityEngine.Debug.LogError(string.Format("[{0}]属性[{1}]不一致", ls.GetType().Name, tar[i].Name));
+                                    SDebug.LogError(string.Format("[{0}]属性[{1}]不一致", ls.GetType().Name, tar[i].Name));
                                 }
                                 else if (tar[i].FieldType.IsArray)
                                 {
@@ -297,7 +297,7 @@ namespace Assets.Scripts.Common
                                     var aori = fori as Array;
                                     if (atar.Length != aori.Length)
                                     {
-                                        UnityEngine.Debug.LogError(string.Format("[{0}]属性[{1}]不一致", ls.GetType().Name, tar[i].Name));
+                                        SDebug.LogError(string.Format("[{0}]属性[{1}]不一致", ls.GetType().Name, tar[i].Name));
                                     }
                                     else
                                     {
@@ -305,7 +305,7 @@ namespace Assets.Scripts.Common
                                         {
                                             if (!System.Object.Equals(atar.GetValue(e), aori.GetValue(e)))
                                             {
-                                                UnityEngine.Debug.LogError(string.Format("[{0}]属性[{1}]不一致", ls.GetType().Name, tar[i].Name));
+                                                SDebug.LogError(string.Format("[{0}]属性[{1}]不一致", ls.GetType().Name, tar[i].Name));
                                             }
                                         }
                                     }
@@ -314,7 +314,7 @@ namespace Assets.Scripts.Common
                                 {
                                     if ((ftar as ICollection).Count != 0 || (fori as ICollection).Count != 0)
                                     {
-                                        UnityEngine.Debug.LogError(string.Format("[{0}]属性[{1}]不一致", ls.GetType().Name, tar[i].Name));
+                                        SDebug.LogError(string.Format("[{0}]属性[{1}]不一致", ls.GetType().Name, tar[i].Name));
                                     }
                                 }
                             }
@@ -322,11 +322,11 @@ namespace Assets.Scripts.Common
                             // {
                             //     if ((tar[i].FieldType != ori[i].FieldType))
                             //     {
-                            //         UnityEngine.Debug.LogError(string.Format("[{0}]属性[{1}]不一致", ls.GetType().Name, tar[i].Name));
+                            //         SDebug.LogError(string.Format("[{0}]属性[{1}]不一致", ls.GetType().Name, tar[i].Name));
                             //     }
                             //     else if ((ftar as ListValueViewBase).Count != 0 || (fori as ListValueViewBase).Count != 0)
                             //     {
-                            //         UnityEngine.Debug.LogError(string.Format("[{0}]属性[{1}]不一致", ls.GetType().Name, tar[i].Name));
+                            //         SDebug.LogError(string.Format("[{0}]属性[{1}]不一致", ls.GetType().Name, tar[i].Name));
                             //     }
                             // }
                             else if (tar[i].FieldType.FullName.Contains("CrypticInt32"))
@@ -335,12 +335,12 @@ namespace Assets.Scripts.Common
                                 int y = HackCrypticInt32Int(fori);
                                 if (x != y)
                                 {
-                                    UnityEngine.Debug.LogError(string.Format("[{0}]属性[{1}]不一致", ls.GetType().Name, tar[i].Name));
+                                    SDebug.LogError(string.Format("[{0}]属性[{1}]不一致", ls.GetType().Name, tar[i].Name));
                                 }
                             }
                             else if ((ftar != null && !ftar.Equals(fori)) || !System.Object.Equals(ftar, fori))
                             {
-                                UnityEngine.Debug.LogError(string.Format("[{0}]属性[{1}]不一致", ls.GetType().Name, tar[i].Name));
+                                SDebug.LogError(string.Format("[{0}]属性[{1}]不一致", ls.GetType().Name, tar[i].Name));
                             }
                         }
                     }
@@ -358,7 +358,7 @@ namespace Assets.Scripts.Common
 
                 ls.OnUse();
 
-                //UnityEngine.Debug.Log("[ClassObjPool New] " + typeof(T).ToString() + " Number: " + instance.totals);
+                //SDebug.Log("[ClassObjPool New] " + typeof(T).ToString() + " Number: " + instance.totals);
 
                 instance.totals++;
 
@@ -390,11 +390,11 @@ namespace Assets.Scripts.Common
 
 #if (DEBUG) && !SGAME_PROFILE_GC
             //var tobj = obj as T;
-            //UnityEngine.Debug.Assert(tobj != null);
+            //SDebug.Assert(tobj != null);
             //for (int i = 0; i < pool.Count; i++)
             //    if (pool[i] == obj)
             //        throw new System.InvalidOperationException("The object is released even though it is in the pool. Are you releasing it twice?");
-            UnityEngine.Debug.Assert((obj as T) != null);
+            SDebug.Assert((obj as T) != null);
             if (obj.bInPool)
             {
                 throw new System.InvalidOperationException("The object is released even though it is in the pool. Are you releasing it twice?");

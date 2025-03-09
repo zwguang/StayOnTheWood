@@ -17,7 +17,7 @@ public class UIGameOverPop : UIBase
 
     public static void OpenUIPanel()
     {
-        UIManager.Instance.ShowPanel(ResPath.prefabPath_GameOverPop);
+        SystemUIManager.Instance.ShowPanel(ResPath.prefabPath_GameOverPop);
     }
 
     // Start is called before the first frame update
@@ -32,7 +32,7 @@ public class UIGameOverPop : UIBase
 
     private void OnRestartBtnClicked()
     {
-        UIManager.Instance.HidePanel(prefabPath);
-        EventManager.Instance.Trigger((int)EventID.GameStart);
+        SystemUIManager.Instance.HidePanel(prefabPath);
+        SystemEventManager.Instance.Trigger((int)EventID.GameStart);
     }
 }

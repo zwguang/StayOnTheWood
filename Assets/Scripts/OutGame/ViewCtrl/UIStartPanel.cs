@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Game;
 using GDK;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,11 +17,16 @@ public class UIStartPanel : UIBase
         m_startBtn.onClick.AddListener(OnStartBtnCLicked);
     }
 
+    public static void OpenUIPanel()
+    {
+        SystemUIManager.Instance.ShowPanel(ResPath.prefabPath_StartPanel);
+    }
+
     void OnStartBtnCLicked()
     {
         SDebug.Log("ViewCtrlStartPanel OnStartBtnCLicked");
 
-        UIManager.Instance.HidePanel(prefabPath);
-        GameSceneManager.Instance.ChangeSceneByName("GameScene");
+        SystemUIManager.Instance.HidePanel(prefabPath);
+        SystemSceneManager.Instance.ChangeSceneByName("GameScene");
     }
 }

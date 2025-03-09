@@ -3,23 +3,47 @@ using System.Collections.Generic;
 
 namespace GDK
 {
-    public class ResManager : Singleton<ResManager>
+    public class SystemResManager : Singleton<SystemResManager>
     {
         public static bool AB_MODE = false;
 
         Dictionary<string, BaseResLoader> m_loaderDic = new Dictionary<string, BaseResLoader>();
         Dictionary<string, BaseResLoader> m_waitingDic = new Dictionary<string, BaseResLoader>();
 
-        
+
         public bool IsExits(string path)
         {
             var loader = GetLoader(path);
             return loader.IsExits();
         }
 
+        /// <summary>
+        /// 此资源是否已经加载
+        /// </summary>
         public bool IsDone(string path)
         {
-            return false;
+            if (string.IsNullOrEmpty(path))
+                return true;
+            var loader = GetLoader(path, false);
+            if (loader == null)
+                return false;
+            return loader.Status == ResloaderStatus.Done;
+        }
+
+        /// <summary>
+        /// 获取已加载的资源，如果未加载，则为空
+        /// </summary>
+        public T GetRes<T>(string path) where T : UnityEngine.Object
+        {
+            return GetRes(path, typeof(T)) as T;
+        }
+
+        public object GetRes(string path, Type type = null)
+        {
+            if (string.IsNullOrEmpty(path))
+                return null;
+            var loader = GetLoader(path, false);
+            return loader?.asset;
         }
 
         public T Load<T>(string path) where T : UnityEngine.Object
@@ -53,12 +77,13 @@ namespace GDK
             {
                 return;
             }
+
             BaseResLoader loader = GetLoader(path);
             if (loader == null)
             {
                 return;
             }
-            
+
             if (count > 0)
             {
                 loader.referenceCount -= count;
@@ -69,7 +94,7 @@ namespace GDK
                 }
             }
         }
-        
+
         private BaseResLoader GetLoader(string path, bool autoCreate = true)
         {
             BaseResLoader loader;
@@ -85,7 +110,7 @@ namespace GDK
                 loader.path = path;
                 loader.onLoad = OnLoad;
             }
-            
+
             return loader;
         }
 
@@ -99,7 +124,6 @@ namespace GDK
             {
                 m_waitingDic.Remove(loader.path);
             }
-            
         }
 
         void Dispose(BaseResLoader loader)
@@ -113,7 +137,7 @@ namespace GDK
             {
                 m_loaderDic.Remove(loader.path);
             }
-            
+
             loader.Dispose();
         }
     }

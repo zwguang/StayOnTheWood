@@ -1,30 +1,44 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Codice.Client.Common;
 using GDK;
 using UnityEngine;
+using Time = UnityEngine.Time;
 
 namespace Game
 {
     public class Player : MonoBehaviour
     {
+        private bool m_bDeath = false;
+
         private void Awake()
         {
             // EventManager.Instance.On();
+            Init();
         }
 
         // Start is called before the first frame update
         void Start()
         {
-        
+        }
+
+        public void Init()
+        {
+            m_bDeath = false;
         }
 
         // Update is called once per frame
         void Update()
         {
+            if (m_bDeath)
+            {
+                return;
+            }
+
             transform.localPosition -= new Vector3(GameManager.Instance.speed * Time.deltaTime, 0, 0);
             if (transform.localPosition.x < -11 || transform.localPosition.x > 11 ||
-            transform.localPosition.y < -4 || transform.localPosition.y > 4)
+                transform.localPosition.y < -4 || transform.localPosition.y > 4)
             {
                 GameOver();
             }
@@ -32,6 +46,11 @@ namespace Game
 
         private void OnTriggerEnter2D(Collider2D other)
         {
+            if (m_bDeath)
+            {
+                return;
+            }
+
             if (other.gameObject.CompareTag("Wood"))
             {
                 Wood wood = other.gameObject.GetComponent<Wood>();
@@ -39,10 +58,9 @@ namespace Game
                 {
                     GameManager.Instance.soreMaxBatch = wood.batch;
                     GameManager.Instance.soreNum++;
-                    EventManager.Instance.Trigger((int)EventID.PlayerScore);
+                    SystemEventManager.Instance.Trigger((int)EventID.PlayerScore);
                     this.transform.localPosition = wood.transform.localPosition;
                 }
-                
             }
             else if (other.gameObject.CompareTag("River"))
             {
@@ -52,8 +70,9 @@ namespace Game
 
         private void GameOver()
         {
+            m_bDeath = true;
             GameManager.Instance.PlayerDeath();
-            EventManager.Instance.Trigger((int)EventID.PlayerDeath);
+            SystemEventManager.Instance.Trigger((int)EventID.PlayerDeath);
         }
 
         public void SetDir(PlayerDirType type)
@@ -85,7 +104,7 @@ namespace Game
 
             this.transform.localRotation = Quaternion.Euler(0, 0, rotationZ);
         }
-        
+
         public void Move(KeyCode type)
         {
             switch (type)
@@ -112,7 +131,7 @@ namespace Game
                 }
             }
         }
-        
+
         public void Move(PlayerDirType type)
         {
             var dirX = GameManager.Instance.StartSpeed;
@@ -146,7 +165,4 @@ namespace Game
             // transform.Translate(moveDir); //todo 跟Rotatio有关系？
         }
     }
-    
-    
-
 }

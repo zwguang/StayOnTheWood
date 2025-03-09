@@ -1,4 +1,6 @@
-﻿public class UIDialogBase : UIPopupAnimBase
+﻿using GDK;
+
+public class UIDialogBase : UIPopupAnimBase
 {
     public override void onAwake()
     {

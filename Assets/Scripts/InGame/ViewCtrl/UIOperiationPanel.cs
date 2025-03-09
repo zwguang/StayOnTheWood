@@ -23,11 +23,11 @@ public class UIOperiationPanel : UIBase
 
     void OnBtnClicked(PlayerDirType type)
     {
-        EventManager.Instance.Trigger((int)EventID.PlayerMove, type);
+        SystemEventManager.Instance.Trigger((int)EventID.PlayerMove, type);
     }
 
     void OnJumpBtnClicked()
     {
-        EventManager.Instance.Trigger((int)(EventID.JumpBtnClicked));
+        SystemEventManager.Instance.Trigger((int)(EventID.JumpBtnClicked));
     }
 }

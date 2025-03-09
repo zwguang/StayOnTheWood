@@ -1,4 +1,6 @@
-﻿public class UIGuideBase : UIBase
+﻿using GDK;
+
+public class UIGuideBase : UIBase
 {
     public override void onAwake()
     {

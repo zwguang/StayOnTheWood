@@ -15,9 +15,9 @@ public class UIInGameMainPanel : UIBase
 
     public override void onAwake()
     {
-        EventManager.Instance.On((int)EventID.PlayerScore, OnPlayerSore);
-        EventManager.Instance.On((int)EventID.PlayerDeath, OnPlayerDeath);
-        EventManager.Instance.On((int)EventID.GameStart, OnGameStart);
+        SystemEventManager.Instance.On((int)EventID.PlayerScore, OnPlayerSore);
+        SystemEventManager.Instance.On((int)EventID.PlayerDeath, OnPlayerDeath);
+        SystemEventManager.Instance.On((int)EventID.GameStart, OnGameStart);
 
         OnButtonClick(m_homeBtn, OnHomeBtnClicked);
     }
@@ -39,7 +39,6 @@ public class UIInGameMainPanel : UIBase
 
     void OnHomeBtnClicked()
     {
-        UIManager.Instance.HidePanel(prefabPath);
-        GameSceneManager.Instance.ChangeSceneByName("HallScene");
+        SystemSceneManager.Instance.ChangeSceneByName("HallScene");
     }
 }

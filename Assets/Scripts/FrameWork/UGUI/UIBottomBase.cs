@@ -1,4 +1,6 @@
-﻿public class UIBottomBase : UIBase
+﻿using GDK;
+
+public class UIBottomBase : UIBase
 {
     public override void onAwake()
     {

@@ -1,37 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Game;
 using GDK;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum UILayer
+public class SystemUIManager : Singleton<SystemUIManager>
 {
-    //UI最底层，再下面就是3D世界了
-    Bottom,
-
-    //菜单层
-    Menu,
-
-    //弹出面板层，会有个mask蒙版
-    Pop,
-    Tips,
-
-    Dialog,
-
-    //新手引导层
-    Guide,
-    Invalid
-}
-
-public class UIManager : Singleton<UIManager>
-{
-    private Dictionary<string, UIBase> m_uiDict = new Dictionary<string, UIBase>(); //显示的面板
+    private Dictionary<string, UIBase> m_uiDict = new Dictionary<string, UIBase>(); //所有的面板
 
     //隐藏的面板,头插法,维护15个
-    private List<UIBase> m_uiHideList = new List<UIBase>(15);
+    private List<UIBase> m_uiHideList = new List<UIBase>(10);
 
     private List<KeyValuePair<string, UIBase>> m_listTemp = new List<KeyValuePair<string, UIBase>>();
 
@@ -39,11 +19,13 @@ public class UIManager : Singleton<UIManager>
 
     //界面order间隔250
     private static int SORTINGORDER_VIEW_GAP = 250;
+
     //一个layer上最多显示20个界面
     private static int UILAYER_VIEW_MAX = 20;
+
     //layer的order的间隔
     private static int UILAYER_GAP = UILAYER_VIEW_MAX * SORTINGORDER_VIEW_GAP;
-    
+
     //每个layer最开始的sortorder
     private int[] UILAYER_START_SORTORDER = new int[6]
     {
@@ -65,7 +47,7 @@ public class UIManager : Singleton<UIManager>
 
     private UIBase CreatePanel(string prefabPath, UIAdapter.CreateCallBack callBack = null)
     {
-        var prefab = ResManager.Instance.Load<GameObject>(prefabPath);
+        var prefab = SystemResManager.Instance.Load<GameObject>(prefabPath);
         GameObject panelObj = GameObject.Instantiate(prefab) as GameObject;
         var viewCtrl = panelObj.GetComponent<UIBase>();
         viewCtrl.prefabPath = prefabPath;
@@ -85,16 +67,8 @@ public class UIManager : Singleton<UIManager>
 
         //设置order
 
-        panelObj.transform.SetParent(GetParent(viewCtrl.layer), false);
-        if (viewCtrl.layer == UILayer.Tips)
-        {
-            _tipsList.Add(viewCtrl);
-        }
-        else
-        {
-            m_uiDict.Add(prefabPath, viewCtrl);
-        }
-
+        UIRoot.Instance.AddToParent(panelObj, viewCtrl.layer);
+        m_uiDict.Add(prefabPath, viewCtrl);
         callBack?.Invoke(prefabPath, prefab);
 
         return viewCtrl;
@@ -123,39 +97,55 @@ public class UIManager : Singleton<UIManager>
     /// </summary>
     public UIBase ShowPanel(string prefabPath, UIAdapter.CreateCallBack callBack = null)
     {
+        SDebug.Log($"ShowPanel prefabPath = {prefabPath}");
+
         UIBase ui = this.GetPanel(prefabPath, callBack);
         if (ui == null)
         {
+            // SDebug.Log($"CreatePanel prefabPath = {prefabPath}");
             //创建一个
             ui = this.CreatePanel(prefabPath, callBack);
         }
 
+        ui.gameObject.SetActive(true);
         return ui;
     }
 
 
     /// <summary>
-    /// 移除页面, 如果菜单界面夹杂在中间位置，可能无法触发resume
+    /// 移除页面,
     /// </summary>
     public void HidePanel(string prefabPath)
     {
+        SDebug.Log($"HidePanel prefabPath = {prefabPath}");
+
         var ui = this.m_uiDict.GetValue(prefabPath);
         if (ui)
         {
             ui.gameObject.SetActive(false);
             //缓存满了
-            if (this.m_uiHideList.Count == this.m_uiHideList.Capacity)
+            if (this.m_uiHideList.Count >= this.m_uiHideList.Capacity)
             {
-                var tempUI = m_uiHideList.Pop();
-                this.m_uiDict.Remove(tempUI.prefabPath);
-                SDebug.Log($"触发LRU,移除冗余面板 prefabPath = {prefabPath}");
+                //如果自己在缓存中
+                if (this.m_uiHideList.Contains(ui))
+                {
+                    this.m_uiHideList.Remove(ui);
+                    this.m_uiHideList.Insert(0, ui);
+                }
+                else
+                {
+                    var tempUI = m_uiHideList.Pop();
+                    this.m_uiDict.Remove(tempUI.prefabPath);
+                    GameObject.Destroy(tempUI.gameObject);
+                    SDebug.Log($"触发LRU,销毁冗余面板 prefabPath = {tempUI.prefabPath}");
+                }
             }
 
             this.m_uiHideList.Insert(0, ui);
         }
         else
         {
-            SDebug.Log($"资源不存在 prefabPath = {prefabPath}");
+            SDebug.LogError($"资源不存在 prefabPath = {prefabPath}");
         }
     }
 
@@ -189,51 +179,5 @@ public class UIManager : Singleton<UIManager>
         }
 
         _tipsList.Clear();
-    }
-
-
-    Transform GetParent(UILayer layer)
-    {
-        Transform parent = null;
-        switch (layer)
-        {
-            case UILayer.Bottom:
-            {
-                parent = UIRoot.Instance.bottomLayer;
-                break;
-            }
-            case UILayer.Menu:
-            {
-                parent = UIRoot.Instance.menuLayer;
-                break;
-            }
-            case UILayer.Pop:
-            {
-                parent = UIRoot.Instance.popLayer;
-                break;
-            }
-            case UILayer.Tips:
-            {
-                parent = UIRoot.Instance.tipsLayer;
-                break;
-            }
-            case UILayer.Dialog:
-            {
-                parent = UIRoot.Instance.dialogLayer;
-                break;
-            }
-            case UILayer.Guide:
-            {
-                parent = UIRoot.Instance.guideLayer;
-                break;
-            }
-            default:
-            {
-                Debug.LogError("layer 异常");
-                break;
-            }
-        }
-
-        return parent;
     }
 }

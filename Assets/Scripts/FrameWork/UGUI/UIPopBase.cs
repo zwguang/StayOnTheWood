@@ -1,4 +1,6 @@
-﻿public class UIPopBase : UIPopupAnimBase
+﻿using GDK;
+
+public class UIPopBase : UIPopupAnimBase
 {
     public override void onAwake()
     {

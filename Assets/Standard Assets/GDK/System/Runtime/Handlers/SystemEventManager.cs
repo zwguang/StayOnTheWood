@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GDK
 {
-    public class EventManager : Singleton<EventManager>
+    public class SystemEventManager : Singleton<SystemEventManager>
     {
         Dictionary<int, List<Delegate>> m_eventDic = new Dictionary<int, List<Delegate>>();
 
