@@ -6,7 +6,7 @@ using GDK;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIGameOverPop : UIBase
+public class UIGameOverPop : UIPopBase
 {
     [SerializeField] private Button m_restartBtn;
 

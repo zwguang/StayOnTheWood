@@ -21,7 +21,7 @@ public class UIBase : MonoBehaviour
 
     //常驻界面
     public bool bResident = false;
-    public bool bNeedMask = false;
+    // public bool bNeedMask = false; //目前来看，只要是弹窗类的都需要mask
 
     #endregion
 
@@ -123,6 +123,10 @@ public class UIBase : MonoBehaviour
     }
 
     public virtual void onDestroy()
+    {
+    }
+
+    public virtual void SetMask()
     {
     }
 

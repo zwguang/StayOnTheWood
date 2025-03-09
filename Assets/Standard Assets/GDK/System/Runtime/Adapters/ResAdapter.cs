@@ -39,7 +39,9 @@ namespace GDK
 
             object asset;
             if (HasRes(path, type, out asset))
+            {
                 return asset;
+            }
             else
             {
                 AddLoadCount(path);
@@ -48,7 +50,7 @@ namespace GDK
             }
         }
 
-        public void UnLoad(string path, int count = 1)
+        public void UnLoad(string path)
         {
             if (m_assetPathDic.ContainsKey(path))
             {

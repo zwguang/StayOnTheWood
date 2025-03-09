@@ -7,7 +7,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIInGameMainPanel : UIBase
+public class UIInGameMainPanel : UIBottomBase
 {
     [SerializeField] private TextMeshProUGUI m_scoreTmp;
 

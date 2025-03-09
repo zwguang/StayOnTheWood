@@ -6,7 +6,7 @@ using GDK;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIStartPanel : UIBase
+public class UIStartPanel : UIBottomBase
 {
     [SerializeField] private Button m_startBtn;
 

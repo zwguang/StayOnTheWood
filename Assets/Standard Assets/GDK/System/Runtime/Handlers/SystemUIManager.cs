@@ -27,7 +27,7 @@ public class SystemUIManager : Singleton<SystemUIManager>
     private static int UILAYER_GAP = UILAYER_VIEW_MAX * SORTINGORDER_VIEW_GAP;
 
     //每个layer最开始的sortorder
-    private int[] UILAYER_START_SORTORDER = new int[6]
+    private int[] UILAYER_START_SORT_ORDER = new int[6]
     {
         0,
         UILAYER_GAP * 1,
@@ -41,7 +41,7 @@ public class SystemUIManager : Singleton<SystemUIManager>
     {
         base.OnConstruct();
 
-        int maxSortOrder = UILAYER_START_SORTORDER.Last() + UILAYER_GAP;
+        int maxSortOrder = UILAYER_START_SORT_ORDER.Last() + UILAYER_GAP;
         SDebug.Assert(maxSortOrder < Int16.MaxValue, "sortorder最大值不能超过 Int16.MaxValue");
     }
 
@@ -53,19 +53,10 @@ public class SystemUIManager : Singleton<SystemUIManager>
         viewCtrl.prefabPath = prefabPath;
 
         //添加canvas
-        var canvas = viewCtrl.GetComponent<Canvas>();
-        if (!canvas)
-        {
-            viewCtrl.gameObject.AddComponent<Canvas>();
-        }
-
-        var gr = viewCtrl.GetComponent<GraphicRaycaster>();
-        if (!gr)
-        {
-            viewCtrl.gameObject.AddComponent<GraphicRaycaster>();
-        }
+        AddCanvas(viewCtrl);
 
         //设置order
+        SetOrderAndMask(viewCtrl);
 
         UIRoot.Instance.AddToParent(panelObj, viewCtrl.layer);
         m_uiDict.Add(prefabPath, viewCtrl);
@@ -73,6 +64,34 @@ public class SystemUIManager : Singleton<SystemUIManager>
 
         return viewCtrl;
     }
+
+    private void AddCanvas(UIBase ui)
+    {
+        var canvas = ui.GetComponent<Canvas>();
+        if (!canvas)
+        {
+            canvas = ui.gameObject.AddComponent<Canvas>();
+            canvas.overrideSorting = true;
+        }
+
+        var gr = ui.GetComponent<GraphicRaycaster>();
+        if (!gr)
+        {
+            ui.gameObject.AddComponent<GraphicRaycaster>();
+        }
+    }
+
+    private void SetOrderAndMask(UIBase ui)
+    {
+        int layerOrder = this.UILAYER_START_SORT_ORDER[(int)ui.layer];
+
+        var canvas = ui.GetComponent<Canvas>();
+        canvas.overrideSorting = true;
+        canvas.sortingOrder = layerOrder;
+
+        ui.SetMask();
+    }
+
 
     private UIBase GetPanel(string prefabPath, UIAdapter.CreateCallBack callBack = null)
     {
@@ -91,10 +110,6 @@ public class SystemUIManager : Singleton<SystemUIManager>
         return ui;
     }
 
-    /// <summary>
-    /// 页面入栈，显示在界面上
-    /// 针对view、menu、pop有不同的逻辑处理
-    /// </summary>
     public UIBase ShowPanel(string prefabPath, UIAdapter.CreateCallBack callBack = null)
     {
         SDebug.Log($"ShowPanel prefabPath = {prefabPath}");

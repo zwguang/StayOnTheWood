@@ -4,7 +4,7 @@ using GDK;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIOperiationPanel : UIBase
+public class UIOperiationPanel : UIBottomBase
 {
     [SerializeField] private Button m_upBtn;
     [SerializeField] private Button m_downBtn;
