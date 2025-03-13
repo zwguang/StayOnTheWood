@@ -11,5 +11,6 @@
         public static readonly string prefabPath_InGameMainPanel = "GameRes/Prefabs/UIpanels/InGameMainPanel";
         public static readonly string prefabPath_OperiationPanel = "GameRes/Prefabs/UIpanels/OperiationPanel";
         public static readonly string prefabPath_GameOverPop = "GameRes/Prefabs/UIpanels/GameOverPop";
+        public static readonly string prefabPath_QRCodeScan = "GameRes/Prefabs/UIpanels/QRCodeScanPanel";
     }
 }
