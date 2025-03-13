@@ -38,7 +38,7 @@ public class UIStartPanel : UIBottomBase
 
     void OnCodeScanBtnCLicked()
     {
-        UIManager.Instance.ShowPanel(ResPath.prefabPath_QRCodeScan);
+        SystemUIManager.Instance.ShowPanel(ResPath.prefabPath_QRCodeScan);
     }
 
     void OnCopyBtnClicked()
