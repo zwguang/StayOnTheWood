@@ -188,7 +188,9 @@ MonoBehaviour:
   bDestroyWhenClose: 0
   bResident: 0
   _showImage: {fileID: 736431315689082484}
+  _tucengImage: {fileID: 8455146253405262018}
   _quitBtn: {fileID: 1211054596878401255}
+  _canvas: {fileID: 0}
 --- !u!1 &2416440019360405937
 GameObject:
   m_ObjectHideFlags: 0
@@ -357,10 +359,10 @@ RectTransform:
   m_Father: {fileID: 2857022360767838066}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 1334, y: 750}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6908538806819742619
 CanvasRenderer:

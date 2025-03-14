@@ -9,18 +9,23 @@ using UnityEngine.UI;
 public class QRCodeScanPanel : UIPopBase
 {
     [SerializeField] private RawImage _showImage = null;
+    [SerializeField] private Image _tucengImage = null;
     [SerializeField] private Button _quitBtn = null;
+    [SerializeField] private Canvas _canvas;
 
     private UnityEngine.WebCamTexture _webCameraTex = null;
     
     private int showImageStartWidth = 0;
     private int showImageStartHeight = 0;
-    private float lastWebCamTextureWidth = 0;
-    private float lastWebCamTextureHeight = 0;
 
     private float _lastScreenWidth = 0;
     private float _lastScreenHeight = 0;
 
+    private float _lastTucengWidth = 0;
+    private float _lastTucengHeight = 0;
+
+    private float _count = 0;
+    
     public override void onAwake()
     {
         base.onAwake();
@@ -33,16 +38,16 @@ public class QRCodeScanPanel : UIPopBase
 #endif
         
         _quitBtn.onClick.AddListener(OnQuitBtnClicked);
+
+        _canvas = UIRoot.Instance.canvas;
     }
 
     // Start is called before the first frame update
     public override void onStart()
     {
-        var showImageRect = this._showImage.rectTransform.rect;
+        var showImageRect = this._tucengImage.rectTransform.rect;
         showImageStartWidth = (int)showImageRect.width;
         showImageStartHeight = (int)showImageRect.height;
-        Debug.Log($"onStart showImage真实 width = {showImageRect.width}  height = {showImageRect.height}");
-
         if (showImageStartWidth < showImageStartHeight)
         {
             var temp = showImageStartHeight;
@@ -50,16 +55,14 @@ public class QRCodeScanPanel : UIPopBase
             showImageStartWidth = temp;
         }
         
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
         var devices = WebCamTexture.devices;
         var deviceName = devices[0].name;
+        //Unity 会尝试请求该分辨率，但最终会自动降级到设备支持的最接近的分辨率。
         _webCameraTex = new WebCamTexture(deviceName, showImageStartWidth, showImageStartHeight, 30);
         _showImage.texture = _webCameraTex;
         _webCameraTex.Play();
-        Debug.Log($"onStart showImage调整 width = {showImageStartWidth}  height = {showImageStartHeight}");
         Debug.Log($"onStart webCameraTex width = {_webCameraTex.width}  height = {_webCameraTex.height}");
-
-        Debug.Log($"onStart screen width = {Screen.width}  height = {Screen.height}");
 
         // this.SetShowImageSize();
 
@@ -76,39 +79,46 @@ public class QRCodeScanPanel : UIPopBase
     
     void SetShowImageSize()
     {
-        // float curRatio = this.showImageStartWidth / _webCameraTex.width;
-        // float fittedHeight = curRatio * _webCameraTex.height;
-        // Debug.Log($"SetShowImageSize 适配camera showImage width = {showImageStartWidth}  height = {fittedHeight}");
-        //
-        //
-        // this.SetRawImageCenterAlign();
-        // // this.m_showImage.GetComponent(CS.UnityEngine.RectTransform).sizeDelta = new CS.UnityEngine.Vector2(this.curScreenWidth, Number(fittedHeight));
-        //
-        // //上述的结果，屏幕上下会有留白，再根据分辨率，等比例缩放下
-        // float screenRotio = (float)Screen.width / (float)Screen.height;
-        //
-        // Debug.Log($"SetShowImageSize this.showImageStartWidth = {this.showImageStartWidth}, screenRotio = {screenRotio}");
-        //
-        // float adapteHight = this.showImageStartWidth / screenRotio;//749
-        // float scale = adapteHight / fittedHeight;
-        // float adapterWidth = this.showImageStartWidth * scale;
-        // this._showImage.rectTransform.sizeDelta = new Vector2(adapterWidth, adapteHight);
-        //
-        // Debug.Log($"SetShowImageSize 适配屏幕 adapter width = {adapterWidth}  height = {adapteHight}");
-        // Debug.Log($"SetShowImageSize 适配屏幕 showImage width = {_showImage.rectTransform.rect.width}  height = {_showImage.rectTransform.rect.height}");
-        // Debug.Log($"SetShowImageSize webCameraTex width = {_webCameraTex.width}  height = {_webCameraTex.height}");
-        //
-        // Debug.Log($"SetShowImageSize screen width = {(int)Screen.width}  height = {(int)Screen.height}");
 
-        float aspect = (float)_webCameraTex.width / (float)_webCameraTex.height;
-        var rect = _showImage.rectTransform.rect;
-        var height = 750;// rect.height;
-        var width = rect.height * aspect;
-        _showImage.rectTransform.sizeDelta = new Vector2(width, height);
-        
-        Debug.Log($"_webCameraTex width = {_webCameraTex.width}, height = {_webCameraTex.height}");
-        Debug.Log($"_showImage width = {width}, height = {height}");
+        var tucengRect = _tucengImage.rectTransform.rect;
+        _lastTucengWidth = tucengRect.width;
+        _lastTucengHeight = tucengRect.height;
+        Debug.Log($"_cutengImage width = {tucengRect.width}, height = {tucengRect.height}");
 
+        this.onStart();
+
+        //根本做不到完全适配，_webCameraTex的分辨率跟设置的不是等比的
+        if (_webCameraTex)
+        {
+            // 按高适配, 大屏左右适配不够
+            // float aspect = (float)_webCameraTex.width / (float)_webCameraTex.height;
+            // float height = tucengRect.height;
+            // var width = height * aspect;
+            // _showImage.rectTransform.sizeDelta = new Vector2(width, tucengRect.height);
+            
+            //大屏时，上下超出遮罩
+            // _showImage.rectTransform.sizeDelta = new Vector2(_webCameraTex.width, _webCameraTex.height);
+
+            //稍微有点拉伸
+            _showImage.rectTransform.sizeDelta = new Vector2(tucengRect.width, tucengRect.height);
+            var rect = _showImage.rectTransform.rect;
+            rect.size = new Vector2(1, 1);
+
+            //根本无法完全适配，比例不一样，上下或者左右总会不对
+            // float cameraRatio = (float)_webCameraTex.width / (float)_webCameraTex.height;
+            // float tucengRatio = tucengRect.width/ tucengRect.height;
+            // if (cameraRatio > tucengRatio)
+            // {
+            //     _showImage.rectTransform.sizeDelta = new Vector2(tucengRect.height*cameraRatio, tucengRect.height);
+            // }
+            // else
+            // {
+            //     _showImage.rectTransform.sizeDelta = new Vector2(tucengRect.width, tucengRect.width/cameraRatio);
+            // }
+            //
+            // Debug.Log($"_webCameraTex width = {_webCameraTex.width}, height = {_webCameraTex.height}");
+            // Debug.Log($"_showImage width = {_showImage.rectTransform.rect.width}, height = {_showImage.rectTransform.rect.height}");
+        }
     }
     
     // Update is called once per frame
@@ -118,16 +128,52 @@ public class QRCodeScanPanel : UIPopBase
             Debug.Log("------------------------发生折叠---------------------------");
             _lastScreenWidth = Screen.width;
             _lastScreenHeight = Screen.height;
+            
+            Canvas.ForceUpdateCanvases();
+            
             SetShowImageSize();
+            
+            _count = 0;
         }
-        var scaleY = _webCameraTex.videoVerticallyMirrored ? -1 : 1;
-        _showImage.transform.localScale = new UnityEngine.Vector3(1,scaleY,1);
-        var orient = -_webCameraTex.videoRotationAngle;
-        _showImage.transform.localEulerAngles = new Vector3(0, 0, orient);
+
+        if (_webCameraTex)
+        {
+            var scaleY = _webCameraTex.videoVerticallyMirrored ? -1 : 1;
+            _showImage.transform.localScale = new UnityEngine.Vector3(1,scaleY,1);
+            var orient = -_webCameraTex.videoRotationAngle;
+            _showImage.transform.localEulerAngles = new Vector3(0, 0, orient);
+        }
+        
+    }
+
+    private void LateUpdate()
+    {
+        // //update中，image平铺还没生效
+        // if (Screen.width != _lastScreenWidth || Screen.height != _lastScreenHeight) {
+        //     Debug.Log("------------------------发生折叠---------------------------");
+        //     _lastScreenWidth = Screen.width;
+        //     _lastScreenHeight = Screen.height;
+        //     _count = 0;
+        // }
+        //
+        // var tucengRect = _tucengImage.rectTransform.rect;
+        // if (tucengRect.width != _lastTucengWidth || tucengRect.height != _lastTucengHeight)
+        // {
+        //     Debug.Log($"---------------------LateUpdate------------------");
+        //     Debug.Log($"_cutengImage width = {tucengRect.width}, height = {tucengRect.height}, count = {_count}");
+        //     _lastTucengWidth = tucengRect.width;
+        //     _lastTucengHeight = tucengRect.height;
+        //     
+        //     SetShowImageSize();
+        // }
+        // else
+        // {
+        //     _count++;
+        // }
     }
 
     void OnQuitBtnClicked()
     {
-        UIManager.Instance.HidePanel(ResPath.prefabPath_QRCodeScan);
+        SystemUIManager.Instance.HidePanel(ResPath.prefabPath_QRCodeScan);
     }
 }
