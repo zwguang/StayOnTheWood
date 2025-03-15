@@ -10,22 +10,23 @@ namespace Game
     {
         private float m_timeCount = 0;
         private float m_addSpeed = 0.1f;
-        
-        public float StartSpeed = 3; //木头x间距/初始速度
-        public float woodGapY = 2.5f;//木头Y间距
+
+        public readonly float StartSpeed = 3f; //木头x间距/初始速度
+        public readonly float woodGapY = 2f; //木头中心点，Y间距
+        public readonly float createWoodInterval = 0.5f;
 
         public float speed;
+
         //得分批次
         public int soreMaxBatch = 0;
         public int soreNum = 0;
 
         public bool GameOver = false;
-        
+
         public void OnStart()
         {
-            
         }
-        
+
         // Update is called once per frame
         public void Update()
         {
@@ -46,7 +47,7 @@ namespace Game
             m_timeCount = 0;
             GameOver = false;
         }
-        
+
         public void PlayerDeath()
         {
             Time.timeScale = 0;
@@ -64,4 +65,3 @@ namespace Game
         }
     }
 }
-

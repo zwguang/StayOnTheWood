@@ -16,8 +16,21 @@ namespace Game
 
         private Player m_player;
 
+        public Player player
+        {
+            get
+            {
+                if (m_player == null)
+                {
+                    m_player = GameObject.Instantiate(m_playerPre).GetComponent<Player>();
+                    m_player.transform.SetParent(m_woodParentTrans, true);
+                }
+
+                return m_player;
+            }
+        }
+
         private float m_createWoodTimeCount = 0;
-        private readonly float m_createWoodInterval = 1f;
 
         private int m_batchCount = 0;
         List<WoodType> m_woodList = new List<WoodType>();
@@ -67,10 +80,7 @@ namespace Game
             WoodManager.Instance.Clear();
             GameManager.Instance.Clear();
 
-            if (m_player)
-            {
-                m_player.gameObject.SetActive(false);
-            }
+            player.gameObject.SetActive(false);
         }
 
         private void Init()
@@ -78,13 +88,11 @@ namespace Game
             GameManager.Instance.OnInit();
             WoodManager.Instance.OnInit();
 
-            m_createWoodTimeCount = m_createWoodInterval;
+            m_createWoodTimeCount = GameManager.Instance.createWoodInterval;
             m_batchCount = 0;
             m_playerDirType = PlayerDirType.Right;
-            if (m_player)
-            {
-                m_player.Init();
-            }
+            player.gameObject.SetActive(false);
+            player.Init();
         }
 
         // Update is called once per frame
@@ -126,14 +134,15 @@ namespace Game
                 return;
             }
 
-            m_player.Move(type);
+            player.Move(type);
         }
 
 
         void CreatWood()
         {
             m_createWoodTimeCount += Time.deltaTime;
-            var timeInterval = GameManager.Instance.StartSpeed / GameManager.Instance.speed * m_createWoodInterval;
+            var timeInterval = GameManager.Instance.StartSpeed / GameManager.Instance.speed *
+                               GameManager.Instance.createWoodInterval;
             if (m_createWoodTimeCount >= timeInterval)
             {
                 m_createWoodTimeCount -= timeInterval;
@@ -145,23 +154,12 @@ namespace Game
                     WoodManager.Instance.CreateWood(m_woodList[i], m_batchCount);
                     if (this.m_woodList[i] == WoodType.BornPlayerMid)
                     {
-                        CreatPlayer();
+                        player.Init();
+                        player.gameObject.SetActive(true);
+                        player.transform.localPosition = new Vector3(L.WoodStartPosX, 0, 0);
                     }
                 }
             }
-        }
-
-        void CreatPlayer()
-        {
-            if (!m_player)
-            {
-                m_player = GameObject.Instantiate(m_playerPre).GetComponent<Player>();
-                m_player.transform.SetParent(m_woodParentTrans, true);
-                m_player.Init();
-            }
-
-            m_player.gameObject.SetActive(true);
-            m_player.transform.localPosition = new Vector3(L.WoodStartPosX, 0, 0);
         }
 
         void OnPlayerScore()
@@ -174,7 +172,7 @@ namespace Game
 
         void OnPlayerMove(PlayerDirType dir)
         {
-            m_player.Move(dir);
+            player.Move(dir);
         }
 
         void OnJoyStickDroging(Vector2 inPut)
@@ -196,12 +194,12 @@ namespace Game
                 m_playerDirType = PlayerDirType.Right;
             }
 
-            m_player.SetDir(m_playerDirType);
+            player.SetDir(m_playerDirType);
         }
 
         void OnJumpBtnClicked()
         {
-            m_player.Move(m_playerDirType);
+            player.Move(m_playerDirType);
         }
     }
 }

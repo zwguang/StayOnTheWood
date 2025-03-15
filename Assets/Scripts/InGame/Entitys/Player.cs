@@ -133,7 +133,7 @@ namespace Game
 
         public void Move(PlayerDirType type)
         {
-            var dirX = GameManager.Instance.StartSpeed;
+            var dirX = GameManager.Instance.StartSpeed * GameManager.Instance.createWoodInterval;
             var dirY = GameManager.Instance.woodGapY;
             Vector3 moveDir = Vector2.zero;
             switch (type)
