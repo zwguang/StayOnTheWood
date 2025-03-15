@@ -21,9 +21,6 @@ public class QRCodeScanPanel : UIPopBase
     private float _lastScreenWidth = 0;
     private float _lastScreenHeight = 0;
 
-    private float _lastTucengWidth = 0;
-    private float _lastTucengHeight = 0;
-
     private float _count = 0;
     
     public override void onAwake()
@@ -81,8 +78,6 @@ public class QRCodeScanPanel : UIPopBase
     {
 
         var tucengRect = _tucengImage.rectTransform.rect;
-        _lastTucengWidth = tucengRect.width;
-        _lastTucengHeight = tucengRect.height;
         Debug.Log($"_cutengImage width = {tucengRect.width}, height = {tucengRect.height}");
 
         this.onStart();
@@ -101,8 +96,6 @@ public class QRCodeScanPanel : UIPopBase
 
             //稍微有点拉伸
             _showImage.rectTransform.sizeDelta = new Vector2(tucengRect.width, tucengRect.height);
-            var rect = _showImage.rectTransform.rect;
-            rect.size = new Vector2(1, 1);
 
             //根本无法完全适配，比例不一样，上下或者左右总会不对
             // float cameraRatio = (float)_webCameraTex.width / (float)_webCameraTex.height;
