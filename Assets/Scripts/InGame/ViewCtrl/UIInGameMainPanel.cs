@@ -15,6 +15,7 @@ public class UIInGameMainPanel : UIBottomBase
 
     public override void onAwake()
     {
+        base.onAwake();
         SystemEventManager.Instance.On((int)EventID.PlayerScore, OnPlayerSore);
         SystemEventManager.Instance.On((int)EventID.PlayerDeath, OnPlayerDeath);
         SystemEventManager.Instance.On((int)EventID.GameStart, OnGameStart);

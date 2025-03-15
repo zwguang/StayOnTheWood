@@ -52,13 +52,13 @@ public class SystemUIManager : Singleton<SystemUIManager>
         var viewCtrl = panelObj.GetComponent<UIBase>();
         viewCtrl.prefabPath = prefabPath;
 
+        UIRoot.Instance.AddToParent(panelObj, viewCtrl.layer);
+
         //添加canvas
         AddCanvas(viewCtrl);
-
         //设置order
         SetOrderAndMask(viewCtrl);
 
-        UIRoot.Instance.AddToParent(panelObj, viewCtrl.layer);
         m_uiDict.Add(prefabPath, viewCtrl);
         callBack?.Invoke(prefabPath, prefab);
 

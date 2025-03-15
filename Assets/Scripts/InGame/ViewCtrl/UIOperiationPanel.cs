@@ -14,6 +14,7 @@ public class UIOperiationPanel : UIBottomBase
 
     public override void onAwake()
     {
+        base.onAwake();
         OnButtonClick(m_upBtn, () => { this.OnBtnClicked(PlayerDirType.Up); });
         OnButtonClick(m_downBtn, () => { this.OnBtnClicked(PlayerDirType.Down); });
         OnButtonClick(m_leftBtn, () => { this.OnBtnClicked(PlayerDirType.Left); });

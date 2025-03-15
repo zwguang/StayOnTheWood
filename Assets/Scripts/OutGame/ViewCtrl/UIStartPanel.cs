@@ -16,6 +16,7 @@ public class UIStartPanel : UIBottomBase
 
     public override void onAwake()
     {
+        base.onAwake();
         SDebug.Log("ViewCtrlStartPanel onAwake");
         // OnButtonClick(m_startBtn, OnStartBtnCLicked);
         m_startBtn.onClick.AddListener(OnStartBtnCLicked);

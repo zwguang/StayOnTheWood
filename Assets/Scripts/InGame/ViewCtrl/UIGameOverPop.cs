@@ -12,6 +12,7 @@ public class UIGameOverPop : UIPopBase
 
     public override void onAwake()
     {
+        base.onAwake();
         OnButtonClick(m_restartBtn, OnRestartBtnClicked);
     }
 

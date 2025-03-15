@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 8398906420038738079}
   - component: {fileID: 5975534671333536151}
   m_Layer: 5
-  m_Name: QRCodeScanPanel
+  m_Name: QRCodeScanPop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -187,6 +187,7 @@ MonoBehaviour:
   layer: 6
   bDestroyWhenClose: 0
   bResident: 0
+  bNeekMask: 0
   _showImage: {fileID: 736431315689082484}
   _tucengImage: {fileID: 8455146253405262018}
   _quitBtn: {fileID: 1211054596878401255}
